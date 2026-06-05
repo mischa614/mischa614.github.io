@@ -1,1 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mischa Norton</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
 
+    <!-- NAV -->
+    <nav>
+      <div class="nav-name">MN</div>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#leadership">Leadership</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">Business &amp; Pre-Law &mdash; Emory University</p>
+        <h1 class="hero-name">Mischa<br><em>Norton</em></h1>
+        <p class="hero-sub">Business Administration &middot; English Minor &middot; Pursuing Law</p>
+        <div class="hero-cta">
+          <a href="#about" class="btn-primary">Learn More</a>
+          <a href="https://www.linkedin.com/in/mischa-r-norton" target="_blank" class="btn-secondary">LinkedIn</a>
+        </div>
+      </div>
+      <div class="hero-deco"></div>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about" class="section section-light">
+      <div class="container two-col">
+        <div class="col-label">
+          <span class="label">About</span>
+        </div>
+        <div class="col-content">
+          <h2>A little about me</h2>
+          <p class="about-text">
+            Mischa is a second-year student at Emory University majoring in Business Administration with an English minor. She is currently an independent financial planner, having earned her Life Insurance and Health, Accident, and Sickness Insurance licenses with GoldBook Financial. This experience sparked her passion for both business law and greater legal advocacy. She plans to pursue law school after graduation, with particular interest in corporate, tax, and estate law.
+          </p>
+          <div class="skills-grid">
+            <div class="skill-tag">Legal Research</div>
+            <div class="skill-tag">Financial Analysis</div>
+            <div class="skill-tag">Writing &amp; Editing</div>
+            <div class="skill-tag">Data Analysis</div>
+            <div class="skill-tag">Spanish (Proficient)</div>
+            <div class="skill-tag">Social Media</div>
+            <div class="skill-tag">Public Health</div>
+            <div class="skill-tag">Research Design</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section section-blush">
+      <div class="container">
+        <div class="section-header">
+          <span class="label">Experience</span>
+          <h2>Professional Background</h2>
+        </div>
+        <div class="cards">
+
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>Sun Valley Wealth</h3>
+                <p class="card-role">Front Desk &amp; Marketing Intern</p>
+              </div>
+              <span class="card-date">May 2026 &ndash; Aug. 2026</span>
+            </div>
+            <ul>
+              <li>Developed podcast marketing content initiatives with minimal supervision in a fast-paced professional environment</li>
+              <li>Greeted and directed high-net-worth clients, ensuring a welcoming and professional first impression</li>
+              <li>Attended and documented client meetings, maintaining accurate records</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>MassMutual &mdash; GoldBook Financial</h3>
+                <p class="card-role">Financial Advising Intern</p>
+              </div>
+              <span class="card-date">June &ndash; Dec. 2025</span>
+            </div>
+            <ul>
+              <li>Reviewed sensitive client records and supported compliance with regulatory standards</li>
+              <li>Attended graduate-level advisor training alongside full-time hires</li>
+              <li>Obtained Life and Accident, Health, or Sickness Insurance licenses through independent self-study</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>Emory Writing &amp; Communication Center</h3>
+                <p class="card-role">Writing Tutor</p>
+              </div>
+              <span class="card-date">Aug. 2025 &ndash; Present</span>
+            </div>
+            <ul>
+              <li>Provided one-on-one writing support across disciplines, focusing on audience, language, flow, and clarity</li>
+              <li>Worked on high-stakes materials ranging from legal briefs to research papers</li>
+              <li>Led social media initiative generating a 200% increase in foot traffic and 50% higher student retention</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <h3>Maricopa County Department of Public Health</h3>
+                <p class="card-role">Youth Advisor</p>
+              </div>
+              <span class="card-date">June 2021 &ndash; May 2024</span>
+            </div>
+            <ul>
+              <li>Served on a 15-student board addressing public health policies affecting Maricopa County youth</li>
+              <li>Implemented the Well Visit Guide in over 30 healthcare centers across Maricopa</li>
+              <li>Presented at the Adolescent Health Conference</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH -->
+    <section id="research" class="section section-navy">
+      <div class="container">
+        <div class="section-header section-header-light">
+          <span class="label label-light">Research &amp; Publications</span>
+          <h2 class="light">Academic Work</h2>
+        </div>
+        <div class="research-grid">
+          <div class="research-card">
+            <p class="research-venue">Western Psychological Association &mdash; Apr. 2024</p>
+            <h3 class="research-title">"Task-Irrelevant Motion Training Improves Vernier Acuity"</h3>
+          </div>
+          <div class="research-card">
+            <p class="research-venue">Western Psychological Association &mdash; Apr. 2023</p>
+            <h3 class="research-title">"Student Success as a Function of In-Utero Androgen Exposure"</h3>
+          </div>
+          <div class="research-card">
+            <p class="research-venue">Adolescent Health Initiative</p>
+            <h3 class="research-title">"The Well Visit Guide"</h3>
+          </div>
+        </div>
+        <div class="research-note">
+          <p>Research conducted at the Arizona State University Neuroscience Lab (2022&ndash;2024), where Mischa designed and administered a sub-perceptual learning paradigm to 129 participants and presented findings at the WPA Conference in San Francisco two years running.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERSHIP -->
+    <section id="leadership" class="section section-light">
+      <div class="container">
+        <div class="section-header">
+          <span class="label">Leadership</span>
+          <h2>Community &amp; Campus</h2>
+        </div>
+        <div class="leadership-grid">
+
+          <div class="leadership-item">
+            <h3>Emory Class Gift Committee</h3>
+            <p class="leadership-role">Co-Chair &mdash; Oct. 2025 &ndash; Present</p>
+            <p>Co-led a 20-student board generating over $15,000 from students, faculty, and alumni with ~70% campus-wide participation. Coordinated weekly meetings and presented to alumni boards.</p>
+          </div>
+
+          <div class="leadership-item">
+            <h3>Family Promise Lending Library</h3>
+            <p class="leadership-role">Founder &mdash; Jan. 2020 &ndash; Present</p>
+            <p>Founded and managed a community-wide book drive collecting and distributing over 1,500 books for K&ndash;12 students. Coordinating possible expansion to Atlanta Family Promise location.</p>
+          </div>
+
+          <div class="leadership-item">
+            <h3>Pre-Law IMPACT Lab</h3>
+            <p class="leadership-role">Member</p>
+            <p>Active participant in Emory's pre-law community, engaging with legal advocacy, case analysis, and professional development opportunities.</p>
+          </div>
+
+          <div class="leadership-item">
+            <h3>Girl Rising &mdash; Outreach Coordinator</h3>
+            <p class="leadership-role">Emory University</p>
+            <p>Coordinated outreach efforts for the global campaign focused on girls' education and gender equity.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section section-blush">
+      <div class="container two-col">
+        <div class="col-label">
+          <span class="label">Education</span>
+        </div>
+        <div class="col-content">
+          <div class="edu-item">
+            <h3>Emory University &mdash; Goizueta Business School</h3>
+            <p class="edu-degree">Bachelor of Business Administration, English Minor &middot; Expected May 2028</p>
+            <p class="edu-detail">Marketing Area Depth &middot; Relevant: Business Data Analytics, Logic, Philosophy, Statistics, Microeconomics, Macroeconomics</p>
+            <p class="edu-activities">Pi Beta Phi &middot; Pre-Law Eagles &middot; Girl Rising Outreach Coordinator &middot; Women in Business</p>
+          </div>
+          <div class="edu-divider"></div>
+          <div class="edu-item">
+            <h3>Oxford College of Emory University</h3>
+            <p class="edu-degree">Associate of Arts &middot; May 2026</p>
+            <p class="edu-activities">Class Gift Committee &middot; Orientation Leader &middot; Writing Tutor &middot; Oxford Philosophy &middot; Women in Business</p>
+          </div>
+          <div class="edu-divider"></div>
+          <div class="certifications">
+            <h3>Licenses &amp; Certifications</h3>
+            <ul class="cert-list">
+              <li>Life Insurance Producer &mdash; Arizona (2025)</li>
+              <li>Accident, Health &amp; Sickness Insurance Producer &mdash; Arizona (2025)</li>
+              <li>LexisNexis Nexis Uni Certifications in Legal Research (2026)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <footer id="contact" class="footer">
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <h2 class="footer-name">Mischa Norton</h2>
+          <p class="footer-tagline">Business &amp; Pre-Law &mdash; Emory University</p>
+        </div>
+        <div class="footer-links">
+          <a href="mailto:mischa.norton@emory.edu">mischa.norton@emory.edu</a>
+          <a href="https://www.linkedin.com/in/mischa-r-norton" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; 2026 Mischa Norton</p>
+    </footer>
+
+  </body>
+</html>
