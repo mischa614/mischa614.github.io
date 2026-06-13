@@ -25,6 +25,8 @@
       padding: 10px;
       border-radius: 12px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     #map {
@@ -73,6 +75,16 @@
       margin-top: 12px;
     }
 
+    #battleView {
+      font-size: 70px;
+      background: linear-gradient(#dff6ff, #fff3b0);
+      border-radius: 18px;
+      padding: 25px;
+      margin: 15px auto;
+      max-width: 420px;
+      border: 4px solid #222;
+    }
+
     #log {
       min-height: 70px;
       background: #222;
@@ -106,30 +118,37 @@
 <body>
   <div id="game">
     <h1>🇮🇹 Brainrotmon Italia</h1>
-    <p>Explore the pasta fields. Battle. Catch. Level up.</p>
+    <p>Explore your real-world region. Battle. Catch. Level up.</p>
 
     <div id="stats">
       <div>❤️ HP: <span id="playerHp">60</span></div>
       <div>⭐ Level: <span id="level">1</span></div>
       <div>✨ XP: <span id="xp">0</span></div>
       <div>🟡 Cannoli Balls: <span id="balls">5</span></div>
+      <div>📍 Region: <span id="region">Unknown</span></div>
     </div>
 
     <div id="map"></div>
 
-    <div>
+    <div id="controls">
       <button onclick="move('up')">⬆️</button><br>
       <button onclick="move('left')">⬅️</button>
       <button onclick="move('down')">⬇️</button>
       <button onclick="move('right')">➡️</button>
     </div>
 
+    <button onclick="askLocation()">📍 Use My Location</button>
+    <button onclick="startLiveLocation()">🛰️ Live Tracking</button>
     <button onclick="openShop()">🛒 Shop</button>
     <button onclick="toggleCollection()">📘 Collection</button>
     <button onclick="saveGame()">💾 Save</button>
     <button onclick="resetGame()">🗑️ Reset</button>
 
     <div id="battle" class="hidden">
+      <div id="battleView">
+        <div>🧍 VS <span id="battleEmoji">❓</span></div>
+      </div>
+
       <h2 id="enemyName"></h2>
       <div class="hpbar">
         <div id="enemyHpBar" class="hpfill"></div>
@@ -153,7 +172,7 @@
       <p id="collection">None yet.</p>
     </div>
 
-    <div id="log">Walk around to find a Brainrotmon.</div>
+    <div id="log">Click “Use My Location” or walk around to find a Brainrotmon.</div>
   </div>
 
   <script>
@@ -181,10 +200,98 @@
     let currentEnemy = null;
     let currentEnemyMaxHp = 0;
     let collection = [];
+    let userLocation = null;
+    let liveWatchId = null;
+
+    function askLocation() {
+      if (!navigator.geolocation) {
+        log("Your browser does not support location.");
+        return;
+      }
+
+      log("Asking for location permission...");
+
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          userLocation = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          };
+
+          const region = getRegionFromLocation(userLocation.lat, userLocation.lon);
+          document.getElementById("region").textContent = region;
+          log(`Location approved! You are in the ${region}.`);
+          drawMap();
+        },
+        function() {
+          log("Location permission denied or unavailable.");
+        }
+      );
+    }
+
+    function startLiveLocation() {
+      if (!navigator.geolocation) {
+        log("Your browser does not support live location.");
+        return;
+      }
+
+      if (liveWatchId !== null) {
+        log("Live tracking is already on.");
+        return;
+      }
+
+      log("Starting live tracking...");
+
+      liveWatchId = navigator.geolocation.watchPosition(
+        function(position) {
+          userLocation = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude
+          };
+
+          const region = getRegionFromLocation(userLocation.lat, userLocation.lon);
+          document.getElementById("region").textContent = region;
+          log(`Live location updated: ${region}.`);
+        },
+        function() {
+          log("Could not track location.");
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 10000,
+          timeout: 10000
+        }
+      );
+    }
+
+    function getRegionFromLocation(lat, lon) {
+      if (lat > 32 && lat < 37 && lon < -110) return "Desert Cannoli Plains";
+      if (lat > 40 && lon < -70 && lon > -90) return "East Coast Espresso Zone";
+      if (lat > 25 && lat < 37 && lon > -100 && lon < -80) return "Southern Spaghetti Swamp";
+      if (lat > 37 && lat < 50 && lon < -100) return "Northern Parmesan Tundra";
+      if (lat > 32 && lat < 42 && lon > -125 && lon < -114) return "West Coast Mozzarella Coast";
+      return "Mystery Mozzarella Region";
+    }
+
+    function getScenery() {
+      const region = userLocation
+        ? getRegionFromLocation(userLocation.lat, userLocation.lon)
+        : "Default";
+
+      if (region.includes("Desert")) return ["🌵", "🏜️", "☀️", "🪨", "🍕"];
+      if (region.includes("East Coast")) return ["🏙️", "🌊", "☕", "🌳", "🍝"];
+      if (region.includes("Southern")) return ["🌾", "🐊", "🌿", "🍝", "🍕"];
+      if (region.includes("Northern")) return ["❄️", "🌲", "🧀", "🏔️", "🌨️"];
+      if (region.includes("West Coast")) return ["🌴", "🌊", "☀️", "🍋", "🍕"];
+
+      return ["🌿", "🌲", "🍝", "🍕", "🌻"];
+    }
 
     function drawMap() {
       const map = document.getElementById("map");
       map.innerHTML = "";
+
+      const scenery = getScenery();
 
       for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {
@@ -195,7 +302,6 @@
             tile.classList.add("player");
             tile.textContent = "🧍";
           } else {
-            const scenery = ["🌿", "🌲", "🍝", "🍕", "🌻"];
             tile.textContent = scenery[Math.floor(Math.random() * scenery.length)];
           }
 
@@ -217,7 +323,11 @@
       if (Math.random() < 0.38) {
         startBattle();
       } else {
-        log("You wander through the pasta fields...");
+        if (userLocation) {
+          log(`You explore the ${getRegionFromLocation(userLocation.lat, userLocation.lon)}...`);
+        } else {
+          log("You wander through the pasta fields...");
+        }
       }
     }
 
@@ -242,6 +352,8 @@
       currentEnemy = { ...monster };
       currentEnemyMaxHp = currentEnemy.hp;
 
+      document.getElementById("map").style.display = "none";
+      document.getElementById("controls").style.display = "none";
       document.getElementById("battle").classList.remove("hidden");
       document.getElementById("shop").classList.add("hidden");
 
@@ -338,7 +450,10 @@
     function endBattle() {
       currentEnemy = null;
       document.getElementById("battle").classList.add("hidden");
+      document.getElementById("map").style.display = "grid";
+      document.getElementById("controls").style.display = "block";
       updateStats();
+      drawMap();
     }
 
     function openShop() {
@@ -385,6 +500,8 @@
       document.getElementById("enemyName").textContent =
         `${currentEnemy.emoji} ${currentEnemy.name}`;
 
+      document.getElementById("battleEmoji").textContent = currentEnemy.emoji;
+
       document.getElementById("enemyHp").textContent =
         `HP: ${Math.max(currentEnemy.hp, 0)} / ${currentEnemyMaxHp}`;
 
@@ -402,7 +519,8 @@
     function saveGame() {
       localStorage.setItem("brainrotmonSave", JSON.stringify({
         player,
-        collection
+        collection,
+        userLocation
       }));
 
       log("Game saved!");
@@ -414,7 +532,14 @@
       if (save) {
         const data = JSON.parse(save);
         player = data.player;
-        collection = data.collection;
+        collection = data.collection || [];
+        userLocation = data.userLocation || null;
+
+        if (userLocation) {
+          document.getElementById("region").textContent =
+            getRegionFromLocation(userLocation.lat, userLocation.lon);
+        }
+
         log("Loaded saved game.");
       }
 
