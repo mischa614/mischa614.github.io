@@ -5,47 +5,57 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(#f7efe2, #ffd6a5);
+      background: linear-gradient(135deg, #111827, #3b0764, #7f1d1d);
       text-align: center;
+      color: white;
+      margin: 0;
+      padding: 20px;
     }
 
     #game {
-      max-width: 750px;
-      margin: 25px auto;
-      background: white;
+      max-width: 900px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
       padding: 20px;
-      border-radius: 18px;
-      box-shadow: 0 0 25px #0003;
+      border-radius: 22px;
+      box-shadow: 0 0 30px #0008;
+    }
+
+    h1 {
+      margin-bottom: 5px;
     }
 
     #stats {
       display: flex;
       justify-content: space-around;
-      background: #eee;
-      padding: 10px;
-      border-radius: 12px;
-      margin-bottom: 15px;
       flex-wrap: wrap;
       gap: 8px;
+      background: #eee;
+      padding: 12px;
+      border-radius: 14px;
+      margin-bottom: 15px;
+      font-weight: bold;
     }
 
     #map {
       display: grid;
-      grid-template-columns: repeat(7, 55px);
-      gap: 5px;
+      grid-template-columns: repeat(7, 58px);
+      gap: 6px;
       justify-content: center;
       margin: 20px;
     }
 
     .tile {
-      width: 55px;
-      height: 55px;
+      width: 58px;
+      height: 58px;
       background: #a8e6a3;
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 25px;
+      border: 2px solid #ffffff88;
     }
 
     .player {
@@ -55,47 +65,75 @@
 
     button {
       margin: 5px;
-      padding: 10px 14px;
+      padding: 11px 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #ef476f;
       color: white;
       cursor: pointer;
       font-weight: bold;
+      box-shadow: 0 3px 0 #9b2341;
     }
 
     button:hover {
       background: #d43d61;
     }
 
-    #battle, #shop, #collectionBox {
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #9b2341;
+    }
+
+    #battle, #shop, #collectionBox, #casino {
       background: #f3f3f3;
-      border-radius: 14px;
-      padding: 12px;
-      margin-top: 12px;
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 14px;
     }
 
     #battleView {
-      font-size: 70px;
-      background: linear-gradient(#dff6ff, #fff3b0);
-      border-radius: 18px;
-      padding: 25px;
+      background: radial-gradient(circle, #fff7ad, #ffb703, #fb7185);
+      border: 5px solid #111;
+      border-radius: 22px;
+      padding: 20px;
       margin: 15px auto;
-      max-width: 420px;
-      border: 4px solid #222;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 15px;
     }
 
-    #log {
-      min-height: 70px;
-      background: #222;
-      color: white;
-      border-radius: 10px;
+    .fighter {
+      width: 220px;
+      min-height: 260px;
+      background: white;
+      border-radius: 18px;
       padding: 12px;
-      margin-top: 15px;
+      box-shadow: 0 0 15px #0004;
     }
 
-    .hidden {
-      display: none;
+    .monster-img {
+      width: 190px;
+      height: 190px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .player-avatar {
+      font-size: 110px;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vs {
+      font-size: 35px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 4px #000;
     }
 
     .hpbar {
@@ -112,19 +150,91 @@
       background: #06d6a0;
       width: 100%;
     }
+
+    #casinoPull {
+      background: linear-gradient(135deg, #020617, #581c87, #be123c);
+      color: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 12px auto;
+      max-width: 500px;
+      border: 4px solid gold;
+    }
+
+    #casinoResult img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      background: white;
+      border-radius: 18px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .collection-card {
+      display: inline-block;
+      width: 150px;
+      background: white;
+      border-radius: 14px;
+      padding: 10px;
+      margin: 8px;
+      box-shadow: 0 0 10px #0002;
+      vertical-align: top;
+    }
+
+    .collection-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    #log {
+      min-height: 75px;
+      background: #111;
+      color: white;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      #battleView {
+        flex-direction: column;
+      }
+
+      #map {
+        grid-template-columns: repeat(7, 42px);
+      }
+
+      .tile {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+      }
+
+      .fighter {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div id="game">
     <h1>🇮🇹 Brainrotmon Italia</h1>
-    <p>Explore your real-world region. Battle. Catch. Level up.</p>
+    <p>Explore your region. Battle. Catch. Gamble gems. Become cursed.</p>
 
     <div id="stats">
       <div>❤️ HP: <span id="playerHp">60</span></div>
       <div>⭐ Level: <span id="level">1</span></div>
       <div>✨ XP: <span id="xp">0</span></div>
       <div>🟡 Cannoli Balls: <span id="balls">5</span></div>
+      <div>💎 Gems: <span id="gems">20</span></div>
       <div>📍 Region: <span id="region">Unknown</span></div>
     </div>
 
@@ -140,20 +250,30 @@
     <button onclick="askLocation()">📍 Use My Location</button>
     <button onclick="startLiveLocation()">🛰️ Live Tracking</button>
     <button onclick="openShop()">🛒 Shop</button>
+    <button onclick="openCasino()">🎰 Crocodilo Casino</button>
     <button onclick="toggleCollection()">📘 Collection</button>
     <button onclick="saveGame()">💾 Save</button>
     <button onclick="resetGame()">🗑️ Reset</button>
 
     <div id="battle" class="hidden">
       <div id="battleView">
-        <div>🧍 VS <span id="battleEmoji">❓</span></div>
-      </div>
+        <div class="fighter">
+          <h3>You</h3>
+          <div class="player-avatar">🧍</div>
+          <p>Trainer</p>
+        </div>
 
-      <h2 id="enemyName"></h2>
-      <div class="hpbar">
-        <div id="enemyHpBar" class="hpfill"></div>
+        <div class="vs">VS</div>
+
+        <div class="fighter">
+          <h3 id="enemyName"></h3>
+          <img id="enemyImage" class="monster-img" src="">
+          <div class="hpbar">
+            <div id="enemyHpBar" class="hpfill"></div>
+          </div>
+          <p id="enemyHp"></p>
+        </div>
       </div>
-      <p id="enemyHp"></p>
 
       <button onclick="attack('slap')">🤌 Pasta Slap</button>
       <button onclick="attack('espresso')">☕ Espresso Blast</button>
@@ -167,9 +287,19 @@
       <button onclick="heal()">Eat Pizza — Heal 20 HP for 15 XP</button>
     </div>
 
+    <div id="casino" class="hidden">
+      <h3>🎰 Crocodilo Casino</h3>
+      <div id="casinoPull">
+        <p>Trade <b>25 gems</b> for a mystery Brainrotmon.</p>
+        <p>Odds: Common 60%, Rare 30%, Legendary 10%</p>
+        <button onclick="gambleBrainrot()">Pull Mystery Brainrotmon — 25 Gems</button>
+        <div id="casinoResult"></div>
+      </div>
+    </div>
+
     <div id="collectionBox" class="hidden">
       <h3>Your Brainrotmon</h3>
-      <p id="collection">None yet.</p>
+      <div id="collection">None yet.</div>
     </div>
 
     <div id="log">Click “Use My Location” or walk around to find a Brainrotmon.</div>
@@ -177,14 +307,14 @@
 
   <script>
     const monsters = [
-      { name: "Bombardiro Crocodilo", hp: 35, emoji: "🐊", rarity: "Rare" },
-      { name: "Tralalero Tralala", hp: 28, emoji: "🦈", rarity: "Common" },
-      { name: "Tung Tung Tung Sahur", hp: 40, emoji: "🥁", rarity: "Rare" },
-      { name: "Ballerina Cappuccina", hp: 25, emoji: "☕", rarity: "Common" },
-      { name: "Lirili Larila", hp: 30, emoji: "🦘", rarity: "Common" },
-      { name: "Chimpanzini Bananini", hp: 32, emoji: "🍌", rarity: "Common" },
-      { name: "Brr Brr Patapim", hp: 45, emoji: "🌲", rarity: "Legendary" },
-      { name: "Frigo Camelo", hp: 38, emoji: "🐫", rarity: "Rare" }
+      { name: "Bombardiro Crocodilo", hp: 35, image: "images/bombardiro.png", rarity: "Rare" },
+      { name: "Tralalero Tralala", hp: 28, image: "images/tralalero.png", rarity: "Common" },
+      { name: "Tung Tung Tung Sahur", hp: 40, image: "images/tungtung.png", rarity: "Rare" },
+      { name: "Ballerina Cappuccina", hp: 25, image: "images/ballerina.png", rarity: "Common" },
+      { name: "Lirili Larila", hp: 30, image: "images/lirili.png", rarity: "Common" },
+      { name: "Chimpanzini Bananini", hp: 32, image: "images/chimpanzini.png", rarity: "Common" },
+      { name: "Brr Brr Patapim", hp: 45, image: "images/patapim.jpg", rarity: "Legendary" },
+      { name: "Frigo Camelo", hp: 38, image: "images/frigo.png", rarity: "Rare" }
     ];
 
     let player = {
@@ -194,7 +324,9 @@
       maxHp: 60,
       level: 1,
       xp: 0,
-      balls: 5
+      balls: 5,
+      gems: 20,
+      lastLoginBonus: null
     };
 
     let currentEnemy = null;
@@ -202,6 +334,16 @@
     let collection = [];
     let userLocation = null;
     let liveWatchId = null;
+
+    function dailyLoginBonus() {
+      const today = new Date().toDateString();
+
+      if (player.lastLoginBonus !== today) {
+        player.gems += 5;
+        player.lastLoginBonus = today;
+        log("Daily login bonus! You got +5 gems.");
+      }
+    }
 
     function askLocation() {
       if (!navigator.geolocation) {
@@ -356,9 +498,10 @@
       document.getElementById("controls").style.display = "none";
       document.getElementById("battle").classList.remove("hidden");
       document.getElementById("shop").classList.add("hidden");
+      document.getElementById("casino").classList.add("hidden");
 
       updateBattle();
-      log(`A wild ${currentEnemy.emoji} ${currentEnemy.name} appeared! Rarity: ${currentEnemy.rarity}`);
+      log(`A wild ${currentEnemy.name} appeared! Rarity: ${currentEnemy.rarity}`);
     }
 
     function attack(type) {
@@ -373,8 +516,9 @@
       currentEnemy.hp -= damage;
 
       if (currentEnemy.hp <= 0) {
+        player.gems += 5;
         gainXp(20);
-        log(`You defeated ${currentEnemy.name}! You gained 20 XP.`);
+        log(`You defeated ${currentEnemy.name}! +20 XP and +5 gems.`);
         endBattle();
       } else {
         enemyAttack();
@@ -416,8 +560,9 @@
 
       if (Math.random() < chance) {
         collection.push(currentEnemy);
+        player.gems += 10;
         gainXp(15);
-        log(`You caught ${currentEnemy.name}! +15 XP.`);
+        log(`You caught ${currentEnemy.name}! +15 XP and +10 gems.`);
         updateCollection();
         endBattle();
       } else {
@@ -436,7 +581,11 @@
         player.level++;
         player.maxHp += 10;
         player.hp = player.maxHp;
-        log(`LEVEL UP! You are now level ${player.level}.`);
+
+        player.balls += 2;
+        player.gems += 10;
+
+        log(`LEVEL UP! You are now level ${player.level}. +2 Cannoli Balls and +10 gems.`);
       }
 
       updateStats();
@@ -458,6 +607,12 @@
 
     function openShop() {
       document.getElementById("shop").classList.toggle("hidden");
+      document.getElementById("casino").classList.add("hidden");
+    }
+
+    function openCasino() {
+      document.getElementById("casino").classList.toggle("hidden");
+      document.getElementById("shop").classList.add("hidden");
     }
 
     function buyBall() {
@@ -484,6 +639,47 @@
       updateStats();
     }
 
+    function gambleBrainrot() {
+      if (player.gems < 25) {
+        log("Not enough gems for Crocodilo Casino.");
+        return;
+      }
+
+      player.gems -= 25;
+      updateStats();
+
+      const resultBox = document.getElementById("casinoResult");
+      resultBox.innerHTML = "<h3>🎰 Rolling...</h3>";
+
+      setTimeout(function() {
+        const roll = Math.random();
+        let rarity;
+
+        if (roll < 0.60) {
+          rarity = "Common";
+        } else if (roll < 0.90) {
+          rarity = "Rare";
+        } else {
+          rarity = "Legendary";
+        }
+
+        const possible = monsters.filter(m => m.rarity === rarity);
+        const prize = { ...possible[Math.floor(Math.random() * possible.length)] };
+
+        collection.push(prize);
+        updateCollection();
+
+        resultBox.innerHTML = `
+          <h3>You pulled ${prize.name}!</h3>
+          <p>Rarity: ${prize.rarity}</p>
+          <img src="${prize.image}" alt="${prize.name}">
+        `;
+
+        log(`🎰 Crocodilo Casino pull: ${prize.name}! Rarity: ${prize.rarity}`);
+        saveGame();
+      }, 900);
+    }
+
     function toggleCollection() {
       document.getElementById("collectionBox").classList.toggle("hidden");
       updateCollection();
@@ -494,13 +690,14 @@
       document.getElementById("level").textContent = player.level;
       document.getElementById("xp").textContent = player.xp;
       document.getElementById("balls").textContent = player.balls;
+      document.getElementById("gems").textContent = player.gems;
     }
 
     function updateBattle() {
       document.getElementById("enemyName").textContent =
-        `${currentEnemy.emoji} ${currentEnemy.name}`;
+        `${currentEnemy.name} (${currentEnemy.rarity})`;
 
-      document.getElementById("battleEmoji").textContent = currentEnemy.emoji;
+      document.getElementById("enemyImage").src = currentEnemy.image;
 
       document.getElementById("enemyHp").textContent =
         `HP: ${Math.max(currentEnemy.hp, 0)} / ${currentEnemyMaxHp}`;
@@ -510,10 +707,20 @@
     }
 
     function updateCollection() {
-      document.getElementById("collection").innerHTML =
-        collection.length
-          ? collection.map(m => `${m.emoji} ${m.name} — ${m.rarity}`).join("<br>")
-          : "None yet.";
+      const collectionBox = document.getElementById("collection");
+
+      if (!collection.length) {
+        collectionBox.innerHTML = "None yet.";
+        return;
+      }
+
+      collectionBox.innerHTML = collection.map(m => `
+        <div class="collection-card">
+          <img src="${m.image}" alt="${m.name}">
+          <b>${m.name}</b>
+          <p>${m.rarity}</p>
+        </div>
+      `).join("");
     }
 
     function saveGame() {
@@ -522,8 +729,6 @@
         collection,
         userLocation
       }));
-
-      log("Game saved!");
     }
 
     function loadGame() {
@@ -531,7 +736,7 @@
 
       if (save) {
         const data = JSON.parse(save);
-        player = data.player;
+        player = { ...player, ...data.player };
         collection = data.collection || [];
         userLocation = data.userLocation || null;
 
@@ -539,13 +744,13 @@
           document.getElementById("region").textContent =
             getRegionFromLocation(userLocation.lat, userLocation.lon);
         }
-
-        log("Loaded saved game.");
       }
 
+      dailyLoginBonus();
       updateStats();
       updateCollection();
       drawMap();
+      saveGame();
     }
 
     function resetGame() {
@@ -556,6 +761,13 @@
     function log(message) {
       document.getElementById("log").textContent = message;
     }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowUp" || event.key === "8") move("up");
+      if (event.key === "ArrowDown" || event.key === "2") move("down");
+      if (event.key === "ArrowLeft" || event.key === "4") move("left");
+      if (event.key === "ArrowRight" || event.key === "6") move("right");
+    });
 
     loadGame();
   </script>
