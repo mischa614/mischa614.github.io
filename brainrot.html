@@ -70,7 +70,6 @@ button:hover{background:#d43d61}
 
 <button onclick="openShop()">🛒 Shop</button>
 <button onclick="openCasino()">🎰 Crocodilo Casino</button>
-<button onclick="toggleCollection()">📘 Full Collection</button>
 <button onclick="toggleAchievements()">🏅 Achievements</button>
 <button onclick="saveGame()">💾 Save</button>
 <button onclick="resetGame()">🗑️ Reset</button>
@@ -110,11 +109,6 @@ button:hover{background:#d43d61}
 <button onclick="gambleBrainrot()">Open Mystery Case — 25 Gems</button>
 <div id="casinoResult"></div>
 </div>
-</div>
-
-<div id="collectionBox" class="hidden">
-<h3>Your Full Brainrot Collection</h3>
-<div id="collection">None yet.</div>
 </div>
 
 <div id="achievementsBox" class="hidden">
@@ -332,6 +326,13 @@ log(`You move through ${currentRegion().name}.`);
 }
 
 function startBattle(monster,boss=false){
+document.getElementById("mainArea").style.display="none";
+
+document.getElementById("collectionBox").classList.add("hidden");
+document.getElementById("achievementsBox").classList.add("hidden");
+document.getElementById("shop").classList.add("hidden");
+document.getElementById("casino").classList.add("hidden");
+
 currentEnemy={...monster};
 currentEnemyMaxHp=currentEnemy.hp;
 isBossFight=boss;
