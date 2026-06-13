@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noob to Boss</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="game">
+    <div class="top-bar">
+      <div class="stat-card">
+        <div class="stat-label">Coins</div>
+        <div class="stat-value" id="coins">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Gems</div>
+        <div class="stat-value" id="gems">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aura</div>
+        <div class="stat-value" id="aura">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Title</div>
+        <div class="stat-value" id="title">NPC</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="panel npc-box">
+        <h2>Your Noob</h2>
+        <div class="npc-avatar" id="npcAvatar">🧍</div>
+        <div class="title-pill" id="npcTitle">NPC</div>
+        <p class="small-text">
+          A background character with boss dreams and extremely unstable aura.
+        </p>
+
+        <div class="progress-wrap">
+          <div class="progress-fill" id="auraProgress"></div>
+        </div>
+        <div class="progress-label" id="auraProgressLabel">0 / 25 aura until Noob</div>
+
+        <h3>Equipped</h3>
+        <div class="equipped-list" id="equippedList"></div>
+      </aside>
+
+      <main class="panel main-panel">
+        <h1 class="game-title">Noob to Boss</h1>
+
+        <div class="season-pill" id="seasonPill">Broke Noob Era</div>
+
+        <h2 class="episode-title" id="episodeTitle">Episode 1: Spawned Broke</h2>
+        <p class="episode-text" id="episodeText"></p>
+
+        <div class="choices" id="choices"></div>
+
+        <div class="message" id="message">
+          Complete side quests to earn gems, then use gems for better choices.
+        </div>
+
+        <div class="footer-actions">
+          <button class="reset-btn danger" onclick="resetGame()">Reset Game</button>
+        </div>
+      </main>
+
+      <aside class="panel explore-panel">
+        <h2>Explore</h2>
+        <p class="small-text">
+          Open a tab when you want to grind side quests or shop for aura accessories.
+        </p>
+
+        <div class="accordion-section">
+          <button class="accordion-header" onclick="toggleAccordion('questsContent')">
+            <span>Side Quests</span>
+            <span id="questsContentIcon">＋</span>
+          </button>
+
+          <div class="accordion-content" id="questsContent">
+            <p class="small-text">Tiny games pretending to be life-changing work experience.</p>
+
+            <div class="quest-list">
+              <button class="quest-btn" onclick="startTapGame()">
+                <strong>🐶 Pet the Billionaire’s Dog</strong>
+                <span>Tap 50 times. Reward: coins, gems, aura.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startGridGame()">
+                <strong>🧼 Clean the Mansion</strong>
+                <span>Clean 10 messy squares. Reward: coins, gems, aura.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startMemoryGame()">
+                <strong>🔐 Remember the Investor Code</strong>
+                <span>Memorize a number. Reward: coins and gems.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startSandwichGame()">
+                <strong>🥪 Make a VIP Sandwich</strong>
+                <span>Press the right ingredients in order. Reward: coins, gems.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startCouchGame()">
+                <strong>🛋️ Find Money Under the Couch</strong>
+                <span>Follow the arrows. Reward: coins and maybe gems.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startSmileGame()">
+                <strong>🙂 Fake Smile at Networking</strong>
+                <span>Smile at the right time. Reward: aura and gems.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startMopGame()">
+                <strong>🧽 Mop the Mall Floor</strong>
+                <span>Click dirty spots before they win. Reward: coins, aura.</span>
+              </button>
+
+              <button class="quest-btn" onclick="startPrinterGame()">
+                <strong>🖨️ Fix the Broken Printer</strong>
+                <span>Press the office buttons in order. Reward: coins, gems, aura.</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-section">
+          <button class="accordion-header" onclick="toggleAccordion('shopContent')">
+            <span>Accessory Shop</span>
+            <span id="shopContentIcon">＋</span>
+          </button>
+
+          <div class="accordion-content" id="shopContent">
+            <p class="small-text">Buy accessories with coins, then equip them to gain more aura.</p>
+            <div class="shop-list" id="shopList"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="modal" id="miniModal">
+    <div class="modal-content">
+      <h2 id="miniTitle">Mini Game</h2>
+      <p class="small-text" id="miniInstructions"></p>
+      <div class="mini-area" id="miniArea"></div>
+      <div class="mini-row">
+        <button class="mini-btn close-btn" onclick="closeMiniGame()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const auraTitles = [
+      { aura: 0, title: "NPC" },
+      { aura: 25, title: "Noob" },
+      { aura: 75, title: "Underground Character" },
+      { aura: 100, title: "Sidekick" },
+      { aura: 150, title: "Local Legend" },
+      { aura: 300, title: "Main Character" },
+      { aura: 500, title: "VIP" },
+      { aura: 2000, title: "CEO" },
+      { aura: 3500, title: "Billionaire" },
+      { aura: 5000, title: "Final Boss" }
+    ];
+
+    const episodes = [
+      {
+        season: "Broke Noob Era",
+        title: "Episode 1: Spawned Broke",
+        text: "You spawn in Rich City with 5 coins, 0 aura, and a fit that says default settings. A rich NPC strolls past like he owns the sidewalk. He drops his wallet, looks back, and says, “Relax, noob. People like you don’t become bosses.”",
+        choices: [
+          { text: "Return the wallet politely", cost: 0, rewardText: "+20 coins, +10 aura", effect: { coins: 20, aura: 10 }, message: "He barely thanks you. Humbling." },
+          { text: "Open it first, just to inspect the vibes", cost: 3, rewardText: "+70 coins, -5 aura", effect: { coins: 70, aura: -5 }, message: "You found money and lost dignity. Balanced economy." },
+          { text: "Film yourself returning it for maximum aura", cost: 7, rewardText: "+40 coins, +35 aura", effect: { coins: 40, aura: 35 }, message: "Fake humble. Real aura." },
+          { text: "Say, “One day you’ll be picking up my wallet.”", cost: 12, rewardText: "+20 coins, +50 aura", effect: { coins: 20, aura: 50 }, message: "Everyone laughs. The foreshadowing is foreshadowing." }
+        ]
+      },
+      {
+        season: "Broke Noob Era",
+        title: "Episode 2: Campus Merch Crisis",
+        text: "You find a campus merch table. The hoodie costs more than your entire net worth. The cashier asks if you are paying with coins or vibes.",
+        choices: [
+          { text: "Buy the cheapest sticker and pretend it’s exclusive", cost: 0, rewardText: "-5 coins, +8 aura", effect: { coins: -5, aura: 8 }, message: "The sticker is tiny. Your confidence is huge." },
+          { text: "Negotiate like you watched one business podcast", cost: 4, rewardText: "+25 coins, +20 aura", effect: { coins: 25, aura: 20 }, message: "The cashier is confused, but impressed." },
+          { text: "Start reselling campus merch as limited drops", cost: 9, rewardText: "+90 coins, +25 aura", effect: { coins: 90, aura: 25 }, message: "You have discovered capitalism and it discovered you back." },
+          { text: "Declare yourself CEO of school spirit", cost: 16, rewardText: "+140 coins, +45 aura", effect: { coins: 140, aura: 45 }, message: "No one voted for you. That did not stop you." }
+        ]
+      },
+      {
+        season: "Broke Noob Era",
+        title: "Episode 3: First Job Disaster",
+        text: "You get hired at Burger Block. Your manager says, “Please just be normal.” This is already a problem.",
+        choices: [
+          { text: "Work your shift normally", cost: 0, rewardText: "+35 coins, +5 aura", effect: { coins: 35, aura: 5 }, message: "You survived one shift without becoming a public incident." },
+          { text: "Sell fries as luxury potato sticks", cost: 5, rewardText: "+90 coins, +15 aura", effect: { coins: 90, aura: 15 }, message: "Rich NPCs love paying extra for the same fries in a smaller cup." },
+          { text: "Make a sandwich so good it becomes office lore", cost: 10, rewardText: "+130 coins, +25 aura", effect: { coins: 130, aura: 25 }, message: "The sandwich had plot relevance." },
+          { text: "Try to buy the restaurant from your manager", cost: 25, rewardText: "+200 coins, +50 aura", effect: { coins: 200, aura: 50 }, message: "You cannot afford it, but your delusion has inspired investors." }
+        ]
+      },
+      {
+        season: "Broke Noob Era",
+        title: "Episode 4: The ASU Frat Leader Appears",
+        text: "A guy in sunglasses indoors blocks your path. His shirt says CEO Mindset. His Venmo history says Dad. His name tag simply says: ASU Frat Leader.",
+        choices: [
+          { text: "Ask if his dad is hiring", cost: 0, rewardText: "+30 coins, -5 aura", effect: { coins: 30, aura: -5 }, message: "He says maybe. Your aura crawls into a bush." },
+          { text: "Copy his confidence but make it weirder", cost: 6, rewardText: "+60 coins, +25 aura", effect: { coins: 60, aura: 25 }, message: "He is unsettled. You are evolving." },
+          { text: "Challenge him to a networking duel", cost: 12, rewardText: "+100 coins, +40 aura", effect: { coins: 100, aura: 40 }, message: "You both say nothing useful. Somehow you win." },
+          { text: "Tell him his aura is rented", cost: 20, rewardText: "+160 coins, +60 aura", effect: { coins: 160, aura: 60 }, message: "The crowd gasps. His sunglasses fog up." }
+        ]
+      },
+      {
+        season: "Broke Noob Era",
+        title: "Episode 5: Mansion Invite",
+        text: "A VIP invites you to a mansion party, but the guard says your aura is giving guest of a guest of a guest.",
+        choices: [
+          { text: "Wait outside and act mysterious", cost: 0, rewardText: "+10 aura", effect: { aura: 10 }, message: "People assume you are important because you are standing silently." },
+          { text: "Bribe the guard with confidence", cost: 8, rewardText: "+80 coins, +25 aura", effect: { coins: 80, aura: 25 }, message: "The guard does not understand what happened, but you are inside now." },
+          { text: "Pretend you own the driveway", cost: 14, rewardText: "+150 coins, +35 aura", effect: { coins: 150, aura: 35 }, message: "A billionaire asks for your business card. You do not have one." },
+          { text: "Give a fake TED Talk by the pool", cost: 30, rewardText: "+300 coins, +100 aura", effect: { coins: 300, aura: 100 }, message: "Your speech had no point, but the lighting was incredible." }
+        ]
+      },
+      {
+        season: "Glow-Up Era",
+        title: "Episode 6: The Outfit Upgrade",
+        text: "You finally have money, which means you are now legally required to dress like you have a meeting and a breakdown in the same afternoon.",
+        choices: [
+          { text: "Buy business casual and call it growth", cost: 4, rewardText: "+30 aura", effect: { aura: 30 }, message: "The blazer is stiff, but so is your new personality." },
+          { text: "Buy fake designer and walk fast", cost: 10, rewardText: "+120 coins, +45 aura", effect: { coins: 120, aura: 45 }, message: "If you move quickly, no one can inspect the logo." },
+          { text: "Wear sunglasses indoors with purpose", cost: 18, rewardText: "+180 coins, +70 aura", effect: { coins: 180, aura: 70 }, message: "Nobody knows why you did this. That is power." },
+          { text: "Hire a mirror to hype you up", cost: 28, rewardText: "+300 coins, +120 aura", effect: { coins: 300, aura: 120 }, message: "The mirror says slay. You believe it." }
+        ]
+      },
+      {
+        season: "Glow-Up Era",
+        title: "Episode 7: The VIP Brunch Scam",
+        text: "A billionaire invites you to brunch and then makes everyone split the bill. The omelet costs more than your childhood.",
+        choices: [
+          { text: "Pay and pretend it did not hurt", cost: 3, rewardText: "-40 coins, +20 aura", effect: { coins: -40, aura: 20 }, message: "Financially painful. Socially necessary." },
+          { text: "Order water and call it intermittent fasting", cost: 7, rewardText: "+40 coins, +35 aura", effect: { coins: 40, aura: 35 }, message: "Minimal spending. Maximum delusion." },
+          { text: "Pitch your startup between pancakes", cost: 15, rewardText: "+200 coins, +60 aura", effect: { coins: 200, aura: 60 }, message: "The startup does not exist, but the pitch deck does." },
+          { text: "Make the billionaire pay by saying it is mentorship", cost: 25, rewardText: "+350 coins, +100 aura", effect: { coins: 350, aura: 100 }, message: "He respects the hustle. Unfortunately." }
+        ]
+      },
+      {
+        season: "Glow-Up Era",
+        title: "Episode 8: Fake Friend Appears",
+        text: "Someone who ignored you at 0 aura suddenly says, “We should totally collab.” Their smile has loading-screen energy.",
+        choices: [
+          { text: "Say yes and learn nothing", cost: 0, rewardText: "+20 coins, -10 aura", effect: { coins: 20, aura: -10 }, message: "You got used for exposure. Exposure paid nothing." },
+          { text: "Smile politely and keep walking", cost: 5, rewardText: "+50 coins, +25 aura", effect: { coins: 50, aura: 25 }, message: "Boundaries unlocked." },
+          { text: "Make them sign a friendship NDA", cost: 12, rewardText: "+120 coins, +50 aura", effect: { coins: 120, aura: 50 }, message: "They cannot legally be fake now." },
+          { text: "Turn the fake friendship into a brand deal", cost: 22, rewardText: "+350 coins, +80 aura", effect: { coins: 350, aura: 80 }, message: "Toxic? Maybe. Monetized? Absolutely." }
+        ]
+      },
+      {
+        season: "Glow-Up Era",
+        title: "Episode 9: The Rival Copies Your Fit",
+        text: "ASU Frat Leader shows up wearing your exact outfit and says, “Great minds.” The crowd looks between you two like this is a court case.",
+        choices: [
+          { text: "Pretend you do not notice", cost: 0, rewardText: "-10 aura", effect: { aura: -10 }, message: "Silence was not mysterious this time. It was just sad." },
+          { text: "Say you wore it better yesterday", cost: 6, rewardText: "+70 coins, +35 aura", effect: { coins: 70, aura: 35 }, message: "Clean hit. The crowd respects timestamps." },
+          { text: "Call him your unpaid intern", cost: 14, rewardText: "+160 coins, +65 aura", effect: { coins: 160, aura: 65 }, message: "He starts explaining that he is actually a founder." },
+          { text: "Rebrand copying as franchising", cost: 26, rewardText: "+450 coins, +100 aura", effect: { coins: 450, aura: 100 }, message: "You accidentally invented licensing." }
+        ]
+      },
+      {
+        season: "Glow-Up Era",
+        title: "Episode 10: Aura Battle",
+        text: "ASU Frat Leader challenges you in front of a crowd. You can play it safe, but playing it safe in front of a crowd is aura damage.",
+        choices: [
+          { text: "Decline in front of everyone", cost: 0, rewardText: "-10 aura", effect: { aura: -10 }, message: "The crowd says oof in perfect harmony." },
+          { text: "Compliment his fit sarcastically", cost: 8, rewardText: "+40 aura", effect: { aura: 40 }, message: "He says thanks before realizing the insult." },
+          { text: "Challenge him publicly", cost: 18, rewardText: "50% chance: +150 aura or -80 aura", special: "chance50", success: { aura: 150 }, fail: { aura: -80 }, successMessage: "You win the aura battle. His chain looks dimmer.", failMessage: "You fumbled in 4K. The sidewalk remembers." },
+          { text: "Risk everything for +2 title levels", cost: 35, rewardText: "25% chance: +2 aura levels. 75% chance: lose half your aura.", special: "riskTwoLevels", successMessage: "ABSOLUTE CINEMA. You gained two aura levels.", failMessage: "Catastrophic aura crash. The crowd turned into witnesses." }
+        ]
+      },
+      {
+        season: "Office Boss Era",
+        title: "Episode 11: First Day at the Office",
+        text: "You enter an office where everyone says circle back but nobody moves. Your badge says intern, but your walk says hostile takeover.",
+        choices: [
+          { text: "Ask where the printer is", cost: 0, rewardText: "+25 coins, +5 aura", effect: { coins: 25, aura: 5 }, message: "The office respects practical questions." },
+          { text: "Say “let’s sync” with no context", cost: 8, rewardText: "+120 coins, +35 aura", effect: { coins: 120, aura: 35 }, message: "People nod. Nobody knows why." },
+          { text: "Add yourself to a meeting you were not invited to", cost: 16, rewardText: "+250 coins, +65 aura", effect: { coins: 250, aura: 65 }, message: "Bold. Confusing. Corporate." },
+          { text: "Introduce yourself as future leadership", cost: 28, rewardText: "+500 coins, +120 aura", effect: { coins: 500, aura: 120 }, message: "HR opens a file. Investors open their wallets." }
+        ]
+      },
+      {
+        season: "Office Boss Era",
+        title: "Episode 12: The Printer Betrayal",
+        text: "The printer jams during your most important moment. It smells fear and unpaid internships.",
+        choices: [
+          { text: "Press random buttons", cost: 0, rewardText: "+20 coins, -5 aura", effect: { coins: 20, aura: -5 }, message: "The printer gets stronger." },
+          { text: "Restart it and whisper please", cost: 6, rewardText: "+90 coins, +25 aura", effect: { coins: 90, aura: 25 }, message: "A respectful workplace miracle." },
+          { text: "Declare war on office equipment", cost: 14, rewardText: "+200 coins, +45 aura", effect: { coins: 200, aura: 45 }, message: "The copier surrenders immediately." },
+          { text: "Outsource printing to your future assistant", cost: 24, rewardText: "+400 coins, +90 aura", effect: { coins: 400, aura: 90 }, message: "You do not have an assistant. Yet." }
+        ]
+      },
+      {
+        season: "Office Boss Era",
+        title: "Episode 13: Your Employee Wants a Raise",
+        text: "You accidentally became someone’s boss. They ask for a raise. This is the first time leadership has had consequences.",
+        choices: [
+          { text: "Say you will circle back", cost: 0, rewardText: "+30 coins, -10 aura", effect: { coins: 30, aura: -10 }, message: "You have become corporate fog." },
+          { text: "Give them a tiny raise and a big title", cost: 8, rewardText: "+80 aura", effect: { aura: 80 }, message: "They are now Senior Executive Vibes Associate." },
+          { text: "Offer stock options in a company that barely exists", cost: 18, rewardText: "+350 coins, +70 aura", effect: { coins: 350, aura: 70 }, message: "They ask what the stock is worth. You say potential." },
+          { text: "Actually pay them fairly", cost: 30, rewardText: "-200 coins, +180 aura", effect: { coins: -200, aura: 180 }, message: "Shocking ethical behavior. Massive aura gain." }
+        ]
+      },
+      {
+        season: "Office Boss Era",
+        title: "Episode 14: The Investor Asks What You Do",
+        text: "An investor corners you and asks what your company actually does. You have three seconds and one LinkedIn buzzword.",
+        choices: [
+          { text: "Say “solutions” and hope that is enough", cost: 0, rewardText: "+50 coins, -5 aura", effect: { coins: 50, aura: -5 }, message: "It was not enough, but it was familiar." },
+          { text: "Say AI-powered even though it is a sandwich app", cost: 10, rewardText: "+250 coins, +60 aura", effect: { coins: 250, aura: 60 }, message: "The investor’s eyes light up. Too easy." },
+          { text: "Pitch a platform for platforms", cost: 20, rewardText: "+500 coins, +100 aura", effect: { coins: 500, aura: 100 }, message: "Meaningless. Fundable." },
+          { text: "Admit you are still figuring it out", cost: 35, rewardText: "+700 coins, +160 aura", effect: { coins: 700, aura: 160 }, message: "Authenticity? In this economy? Revolutionary." }
+        ]
+      },
+      {
+        season: "Office Boss Era",
+        title: "Episode 15: LinkedIn Premium Moment",
+        text: "LinkedIn offers you Premium. It feels less like a subscription and more like a personality change.",
+        choices: [
+          { text: "Ignore it and stay mysterious", cost: 0, rewardText: "+20 aura", effect: { aura: 20 }, message: "Sometimes not posting is the strongest post." },
+          { text: "Accept the free trial and become unbearable", cost: 8, rewardText: "+200 coins, +55 aura", effect: { coins: 200, aura: 55 }, message: "You start saying humbled under posts about yourself." },
+          { text: "Post a fake founder journey", cost: 18, rewardText: "+500 coins, +110 aura", effect: { coins: 500, aura: 110 }, message: "It begins with 'I was once just a noob...'" },
+          { text: "Network so hard the app sends a warning", cost: 32, rewardText: "+900 coins, +180 aura", effect: { coins: 900, aura: 180 }, message: "The algorithm fears you." }
+        ]
+      },
+      {
+        season: "Rich Menace Era",
+        title: "Episode 16: The Rented Sports Car Incident",
+        text: "You rent a sports car for one hour and immediately call it yours. Unfortunately, the real owner also exists.",
+        choices: [
+          { text: "Say it is a test drive", cost: 0, rewardText: "+80 coins, -20 aura", effect: { coins: 80, aura: -20 }, message: "Nobody believes you. Not even the car." },
+          { text: "Pose fast before anyone asks questions", cost: 10, rewardText: "+350 coins, +70 aura", effect: { coins: 350, aura: 70 }, message: "The photos hit. The truth does not." },
+          { text: "Convince the owner it is exposure", cost: 22, rewardText: "+700 coins, +140 aura", effect: { coins: 700, aura: 140 }, message: "The owner hates that it worked." },
+          { text: "Buy a cheaper car and call it rare", cost: 40, rewardText: "+1100 coins, +220 aura", effect: { coins: 1100, aura: 220 }, message: "Scarcity is just confidence with a price tag." }
+        ]
+      },
+      {
+        season: "Rich Menace Era",
+        title: "Episode 17: Accidental Billboard Purchase",
+        text: "You click one suspicious ad and accidentally buy a billboard that says TRUST ME BRO in giant letters.",
+        choices: [
+          { text: "Panic and pretend it was marketing", cost: 0, rewardText: "-100 coins, +25 aura", effect: { coins: -100, aura: 25 }, message: "The campaign has no product, but strong font." },
+          { text: "Put your face on it", cost: 12, rewardText: "+500 coins, +90 aura", effect: { coins: 500, aura: 90 }, message: "People are concerned. Also curious." },
+          { text: "Sell ad space to ASU Frat Leader", cost: 24, rewardText: "+1000 coins, +140 aura", effect: { coins: 1000, aura: 140 }, message: "He pays in crypto and vibes. Mostly vibes." },
+          { text: "Turn it into a motivational brand", cost: 42, rewardText: "+1600 coins, +260 aura", effect: { coins: 1600, aura: 260 }, message: "Trust Me Bro becomes a movement. Society is cooked." }
+        ]
+      },
+      {
+        season: "Rich Menace Era",
+        title: "Episode 18: Avoiding Taxes Poorly",
+        text: "A tax form appears. You stare at it like it is a final boss with punctuation.",
+        choices: [
+          { text: "Hide it under a couch cushion", cost: 0, rewardText: "-50 coins, -20 aura", effect: { coins: -50, aura: -20 }, message: "The IRS has better eyesight than expected." },
+          { text: "Ask a tax lawyer what a deduction is", cost: 14, rewardText: "-120 coins, +120 aura", effect: { coins: -120, aura: 120 }, message: "Professional help. Rare mature moment." },
+          { text: "Call your private jet a business pencil", cost: 28, rewardText: "+800 coins, +120 aura", effect: { coins: 800, aura: 120 }, message: "The accountant goes silent. Not good silent." },
+          { text: "Create a charity called Save the Noobs", cost: 50, rewardText: "+1500 coins, +300 aura", effect: { coins: 1500, aura: 300 }, message: "It is suspiciously effective and mildly wholesome." }
+        ]
+      },
+      {
+        season: "Rich Menace Era",
+        title: "Episode 19: The Mysterious CEO Deal",
+        text: "A mysterious CEO offers you a deal in a room with no windows and too many leather chairs.",
+        choices: [
+          { text: "Say you need to think and then do not think", cost: 0, rewardText: "+90 coins, +10 aura", effect: { coins: 90, aura: 10 }, message: "Avoidance has entered the chat." },
+          { text: "Ask what the company actually does", cost: 16, rewardText: "+500 coins, +100 aura", effect: { coins: 500, aura: 100 }, message: "He dodges the question. You respect the form." },
+          { text: "Counteroffer with nonsense numbers", cost: 32, rewardText: "+1300 coins, +220 aura", effect: { coins: 1300, aura: 220 }, message: "He accepts. That should worry you." },
+          { text: "Buy him out using pure confidence", cost: 60, rewardText: "+2500 coins, +400 aura", effect: { coins: 2500, aura: 400 }, message: "The lawyers are crying. You are legally taller now." }
+        ]
+      },
+      {
+        season: "Rich Menace Era",
+        title: "Episode 20: Buying an Island You Cannot Spell",
+        text: "You buy a private island because someone said diversification. You cannot pronounce the island’s name. You own it anyway.",
+        choices: [
+          { text: "Call it Noob Island", cost: 0, rewardText: "+120 aura", effect: { aura: 120 }, message: "Simple. Iconic. Slightly colonial-coded, but we move." },
+          { text: "Build an infinity pool before plumbing", cost: 20, rewardText: "+900 coins, +180 aura", effect: { coins: 900, aura: 180 }, message: "The pool has more aura than infrastructure." },
+          { text: "Hire a bodyguard to protect your snacks", cost: 40, rewardText: "+1800 coins, +320 aura", effect: { coins: 1800, aura: 320 }, message: "Security has priorities." },
+          { text: "Invite every noob except ASU Frat Leader", cost: 70, rewardText: "+3000 coins, +500 aura", effect: { coins: 3000, aura: 500 }, message: "He watches from a yacht rental. Devastating." }
+        ]
+      },
+      {
+        season: "Famous Final Boss Era",
+        title: "Episode 21: Paparazzi Panic",
+        text: "You are famous now. Paparazzi appear from behind a decorative plant. One asks if you remember being broke.",
+        choices: [
+          { text: "Say no comment and walk into a door", cost: 0, rewardText: "-25 aura", effect: { aura: -25 }, message: "The door wins the interview." },
+          { text: "Use sunglasses as emotional armor", cost: 18, rewardText: "+600 coins, +140 aura", effect: { coins: 600, aura: 140 }, message: "Nobody can see your fear. Luxury." },
+          { text: "Stage a dramatic slow-motion exit", cost: 36, rewardText: "+1400 coins, +260 aura", effect: { coins: 1400, aura: 260 }, message: "The wind machine was unnecessary. Perfect." },
+          { text: "Hire paparazzi to photograph your paparazzi", cost: 65, rewardText: "+2800 coins, +450 aura", effect: { coins: 2800, aura: 450 }, message: "Media recursion unlocked." }
+        ]
+      },
+      {
+        season: "Famous Final Boss Era",
+        title: "Episode 22: Crazy Fan Encounter",
+        text: "A fan runs up screaming your old username. You forgot your humble era had witnesses.",
+        choices: [
+          { text: "Pretend your assistant handles memories", cost: 0, rewardText: "+100 coins, -15 aura", effect: { coins: 100, aura: -15 }, message: "Your assistant is a calendar app." },
+          { text: "Take a selfie and look approachable", cost: 16, rewardText: "+700 coins, +120 aura", effect: { coins: 700, aura: 120 }, message: "Relatable, but in a controlled way." },
+          { text: "Give them a scholarship to Noob Island", cost: 38, rewardText: "-500 coins, +400 aura", effect: { coins: -500, aura: 400 }, message: "Unexpectedly wholesome. The crowd short-circuits." },
+          { text: "Turn the fan encounter into a documentary", cost: 70, rewardText: "+3200 coins, +500 aura", effect: { coins: 3200, aura: 500 }, message: "It wins an award no one can explain." }
+        ]
+      },
+      {
+        season: "Famous Final Boss Era",
+        title: "Episode 23: Public Apology Video",
+        text: "You are trending for calling your island a productivity ecosystem. Your team says you need an apology video immediately.",
+        choices: [
+          { text: "Post a notes-app apology", cost: 0, rewardText: "-100 aura", effect: { aura: -100 }, message: "The font was not enough." },
+          { text: "Sigh deeply before speaking", cost: 20, rewardText: "+500 coins, +150 aura", effect: { coins: 500, aura: 150 }, message: "The sigh carried the apology." },
+          { text: "Cry one tasteful billionaire tear", cost: 45, rewardText: "+1800 coins, +350 aura", effect: { coins: 1800, aura: 350 }, message: "The tear had production value." },
+          { text: "Announce a rebrand instead of apologizing", cost: 85, rewardText: "+4500 coins, +650 aura", effect: { coins: 4500, aura: 650 }, message: "Crisis? No. Brand refresh." }
+        ]
+      },
+      {
+        season: "Famous Final Boss Era",
+        title: "Episode 24: Final Boss Choice",
+        text: "You stand above Rich City. ASU Frat Leader asks if you are happy. You look at your coins, gems, aura, and suspiciously empty soul.",
+        choices: [
+          { text: "Say happiness is not scalable", cost: 0, rewardText: "+100 aura", effect: { aura: 100 }, message: "That sounded deep enough to sell." },
+          { text: "Give every noob a starter wallet", cost: 35, rewardText: "-1000 coins, +700 aura", effect: { coins: -1000, aura: 700 }, message: "For one second, you almost break the cycle." },
+          { text: "Buy the sidewalk where you spawned", cost: 75, rewardText: "+2500 coins, +600 aura", effect: { coins: 2500, aura: 600 }, message: "You now own trauma real estate." },
+          { text: "Declare yourself the final boss", cost: 100, rewardText: "+5000 coins, +1000 aura", effect: { coins: 5000, aura: 1000 }, message: "The skybox flickers. The game understands." }
+        ]
+      },
+      {
+        season: "Famous Final Boss Era",
+        title: "Episode 25: The Wallet Loop",
+        text: "You step out of your private car in Rich City. The street looks familiar. Too familiar. A broke NPC bumps into you, holding 5 coins and absolutely no aura. Your golden wallet slips from your pocket and lands at their feet. For a second, you see yourself.",
+        choices: [
+          { text: "Say, “Relax, noob. People like you don’t become bosses.”", cost: 0, rewardText: "Game Over", effect: {}, final: true, message: "Game Over: You became what you hated most." },
+          { text: "Pick up the wallet yourself, but still say it", cost: 0, rewardText: "Game Over", effect: {}, final: true, message: "Game Over: The wallet was never the problem. The aura was." },
+          { text: "Let them keep it and walk away", cost: 0, rewardText: "Game Over", effect: { aura: 250 }, final: true, message: "Game Over: You almost changed. Almost." },
+          { text: "Drop a second wallet for dramatic effect", cost: 0, rewardText: "Game Over", effect: { aura: 500 }, final: true, message: "Game Over: Final Boss behavior. NPC soul." }
+        ]
+      }
+    ];
+
+    const accessories = [
+      { id: "lanyard", name: "🎫 Student ID Lanyard", category: "item", price: 20, auraBoost: 2, description: "Early-game campus credibility." },
+      { id: "tote", name: "🛍️ Free Orientation Tote", category: "item", price: 35, auraBoost: 4, description: "Contains one pen and unlimited false hope." },
+      { id: "slides", name: "🩴 Dining Hall Slides", category: "outfit", price: 50, auraBoost: 5, description: "Comfortable. Not respectable." },
+      { id: "cap", name: "🧢 Campus Cap", category: "hat", price: 70, auraBoost: 7, description: "Makes you look involved." },
+      { id: "hoodie", name: "🎓 Campus Hoodie", category: "outfit", price: 120, auraBoost: 12, description: "The official uniform of pretending you have plans." },
+
+      { id: "sunglasses", name: "🕶️ Tiny Sunglasses", category: "glasses", price: 180, auraBoost: 18, description: "Instant unnecessary confidence." },
+      { id: "vipBand", name: "🎟️ VIP Wristband", category: "item", price: 260, auraBoost: 25, description: "May or may not be from last year." },
+      { id: "blueLight", name: "🤓 Blue Light Glasses", category: "glasses", price: 350, auraBoost: 35, description: "Productivity cosplay." },
+      { id: "fakeWatch", name: "⌚ I Know a Guy Watch", category: "item", price: 550, auraBoost: 50, description: "The second hand ticks nervously." },
+      { id: "designer", name: "🧥 Fake Designer Fit", category: "outfit", price: 750, auraBoost: 70, description: "Legally distinct luxury." },
+
+      { id: "linkedin", name: "💼 LinkedIn Premium Badge", category: "item", price: 1000, auraBoost: 90, description: "Humbled to announce unbearable posting." },
+      { id: "blazer", name: "🧥 Business Casual Blazer", category: "outfit", price: 1300, auraBoost: 115, description: "Adds meeting-room posture." },
+      { id: "conference", name: "🏷️ Conference Lanyard", category: "item", price: 1700, auraBoost: 140, description: "Proof you once stood near a panel." },
+      { id: "mug", name: "☕ Circle Back Mug", category: "item", price: 2200, auraBoost: 175, description: "Contains coffee and vague promises." },
+      { id: "investorGlasses", name: "👓 Investor Glasses", category: "glasses", price: 2800, auraBoost: 210, description: "You look like you understand charts." },
+
+      { id: "fakeRolex", name: "⌚ Fake Rolex", category: "item", price: 3600, auraBoost: 260, description: "Shines brightest in bad lighting." },
+      { id: "rolex", name: "💎 Real-ish Rolex", category: "item", price: 5000, auraBoost: 350, description: "Real enough for people not to ask." },
+      { id: "chanel", name: "👜 Chanel Bag", category: "item", price: 7000, auraBoost: 480, description: "Carries lip gloss and generational pressure." },
+      { id: "birkin", name: "👜 Birkin of Doom", category: "item", price: 9500, auraBoost: 650, description: "The bag has more aura than most cities." },
+      { id: "suit", name: "🤵 Billionaire Suit", category: "outfit", price: 12000, auraBoost: 800, description: "Makes every hallway feel like an acquisition." },
+
+      { id: "bodyguard", name: "🛡️ Bodyguard", category: "hat", price: 16000, auraBoost: 1000, description: "Technically not a hat, but he stands behind you." },
+      { id: "sportsCarKey", name: "🏎️ Sports Car Key", category: "item", price: 22000, auraBoost: 1300, description: "You do not need to own the car if the key is loud enough." },
+      { id: "pool", name: "🏊 Infinity Pool", category: "glasses", price: 30000, auraBoost: 1700, description: "Not wearable. Still equipped emotionally." },
+      { id: "jet", name: "✈️ Private Jet Boarding Pass", category: "item", price: 42000, auraBoost: 2200, description: "The final form of cutting the line." },
+      { id: "island", name: "🏝️ Private Island", category: "outfit", price: 60000, auraBoost: 3000, description: "You are now dressed as land ownership." }
+    ];
+
+    let game = {
+      coins: 5,
+      gems: 0,
+      baseAura: 0,
+      episodeIndex: 0,
+      complete: false,
+      owned: [],
+      equipped: {
+        hat: null,
+        glasses: null,
+        outfit: null,
+        item: null
+      }
+    };
+
+    let tapTimer = null;
+    let smileTimer = null;
+
+    function saveGame() {
+      localStorage.setItem("noobToBossSaveV2", JSON.stringify(game));
+    }
+
+    function loadGame() {
+      const saved = localStorage.getItem("noobToBossSaveV2");
+      if (saved) game = JSON.parse(saved);
+      render();
+    }
+
+    function getEquippedAura() {
+      let total = 0;
+      Object.values(game.equipped).forEach(id => {
+        const item = accessories.find(a => a.id === id);
+        if (item) total += item.auraBoost;
+      });
+      return total;
+    }
+
+    function getChoiceCost(choice) {
+      if (game.episodeIndex === 0) {
+        return choice.cost;
+      }
+
+      if (choice.final) {
+       return choice.cost;
+      }
+
+      let minimumCost = 1;
+
+      if (game.episodeIndex >= 5) minimumCost = 2;   // Glow-Up Era
+      if (game.episodeIndex >= 10) minimumCost = 4;  // Office Boss Era
+      if (game.episodeIndex >= 15) minimumCost = 7;  // Rich Menace Era
+      if (game.episodeIndex >= 20) minimumCost = 10; // Famous Final Boss Era
+
+      return Math.max(minimumCost, choice.cost);
+    }
+
+    function getTotalAura() {
+      return Math.max(0, game.baseAura + getEquippedAura());
+    }
+
+    function getCurrentTitle() {
+      const totalAura = getTotalAura();
+      let current = auraTitles[0];
+      auraTitles.forEach(t => {
+        if (totalAura >= t.aura) current = t;
+      });
+      return current.title;
+    }
+
+    function getNextTitle() {
+      return auraTitles.find(t => t.aura > getTotalAura()) || null;
+    }
+
+    function addStats(effect) {
+      game.coins += effect.coins || 0;
+      game.gems += effect.gems || 0;
+      game.baseAura += effect.aura || 0;
+
+      if (game.coins < 0) game.coins = 0;
+      if (game.gems < 0) game.gems = 0;
+      if (game.baseAura < 0) game.baseAura = 0;
+
+      saveGame();
+      render();
+    }
+
+    function render() {
+      const totalAura = getTotalAura();
+      const currentTitle = getCurrentTitle();
+      const nextTitle = getNextTitle();
+
+      document.getElementById("coins").textContent = game.coins;
+      document.getElementById("gems").textContent = game.gems;
+      document.getElementById("aura").textContent = totalAura;
+      document.getElementById("title").textContent = currentTitle;
+      document.getElementById("npcTitle").textContent = currentTitle;
+
+      if (nextTitle) {
+        const previous = [...auraTitles].reverse().find(t => totalAura >= t.aura);
+        const start = previous ? previous.aura : 0;
+        const progress = ((totalAura - start) / (nextTitle.aura - start)) * 100;
+        document.getElementById("auraProgress").style.width = `${Math.min(progress, 100)}%`;
+        document.getElementById("auraProgressLabel").textContent =
+          `${totalAura} / ${nextTitle.aura} aura until ${nextTitle.title}`;
+      } else {
+        document.getElementById("auraProgress").style.width = "100%";
+        document.getElementById("auraProgressLabel").textContent = `${totalAura} aura — maximum title reached`;
+      }
+
+      renderAvatar();
+      renderEpisode();
+      renderEquipped();
+      renderShop();
+    }
+
+    function renderAvatar() {
+      const totalAura = getTotalAura();
+      let avatar = "🧍";
+      if (totalAura >= 5000) avatar = "👑";
+      else if (totalAura >= 3500) avatar = "🤑";
+      else if (totalAura >= 2000) avatar = "🤵";
+      else if (totalAura >= 500) avatar = "😎";
+      else if (totalAura >= 300) avatar = "✨";
+      else if (totalAura >= 150) avatar = "🌟";
+      else if (totalAura >= 100) avatar = "🧑‍🤝‍🧑";
+      else if (totalAura >= 75) avatar = "🕴️";
+      else if (totalAura >= 25) avatar = "🙂";
+      document.getElementById("npcAvatar").textContent = avatar;
+    }
+
+    function renderEpisode() {
+      const choicesBox = document.getElementById("choices");
+      choicesBox.innerHTML = "";
+
+      if (game.complete) {
+        document.getElementById("seasonPill").textContent = "Game Over";
+        document.getElementById("episodeTitle").textContent = "Game Over: You Became What You Hated Most";
+        document.getElementById("episodeText").textContent =
+          "Final Title: Boss. Real Title: Still NPC.";
+        choicesBox.innerHTML = `<div class="end-card">Reset the game to try the journey again.</div>`;
+        return;
+      }
+
+      const episode = episodes[game.episodeIndex];
+      document.getElementById("seasonPill").textContent = episode.season;
+      document.getElementById("episodeTitle").textContent = episode.title;
+      document.getElementById("episodeText").textContent = episode.text;
+
+      episode.choices.forEach(choice => {
+        const button = document.createElement("button");
+        const actualCost = getChoiceCost(choice);
+
+        button.className = "choice-btn";
+        button.disabled = game.gems < actualCost;
+
+        button.innerHTML = `
+          <div class="choice-main">${choice.text}</div>
+          <div class="choice-cost">Cost: ${actualCost === 0 ? "Free" : actualCost + " gems"}</div>
+          <div class="choice-reward">Result: ${choice.rewardText}</div>
+        `;
+
+        button.onclick = () => chooseOption(choice);
+        choicesBox.appendChild(button);
+      });
+    }
+
+    function chooseOption(choice) {
+      const actualCost = getChoiceCost(choice);
+
+      if (game.gems < actualCost) {
+        setMessage("Not enough gems. Go grind side quests.");
+        return;
+      }
+
+  game.gems -= actualCost;
+
+      if (choice.special === "chance50") {
+        if (Math.random() < 0.5) {
+          addRawStats(choice.success);
+          setMessage(choice.successMessage);
+        } else {
+          addRawStats(choice.fail);
+          setMessage(choice.failMessage);
+        }
+      } else if (choice.special === "riskTwoLevels") {
+        if (Math.random() < 0.25) {
+          jumpTwoAuraLevels();
+          setMessage(choice.successMessage);
+        } else {
+          game.baseAura = Math.floor(game.baseAura / 2);
+          setMessage(choice.failMessage);
+        }
+      } else {
+        addRawStats(choice.effect || {});
+        setMessage(choice.message);
+      }
+
+      if (choice.final) {
+        game.complete = true;
+      } else {
+        game.episodeIndex++;
+        if (game.episodeIndex >= episodes.length) game.complete = true;
+      }
+
+      saveGame();
+      render();
+    }
+
+    function addRawStats(effect) {
+      game.coins += effect.coins || 0;
+      game.gems += effect.gems || 0;
+      game.baseAura += effect.aura || 0;
+      if (game.coins < 0) game.coins = 0;
+      if (game.gems < 0) game.gems = 0;
+      if (game.baseAura < 0) game.baseAura = 0;
+    }
+
+    function jumpTwoAuraLevels() {
+      const totalAura = getTotalAura();
+      const currentIndex = auraTitles.findLastIndex(t => totalAura >= t.aura);
+      const targetIndex = Math.min(currentIndex + 2, auraTitles.length - 1);
+      const targetAura = auraTitles[targetIndex].aura;
+      const neededBaseAura = targetAura - getEquippedAura();
+      if (game.baseAura < neededBaseAura) game.baseAura = neededBaseAura;
+    }
+
+    function renderEquipped() {
+      const box = document.getElementById("equippedList");
+      box.innerHTML = "";
+      ["hat", "glasses", "outfit", "item"].forEach(category => {
+        const item = accessories.find(a => a.id === game.equipped[category]);
+        const div = document.createElement("div");
+        div.className = "equipped-item";
+        div.textContent = item
+          ? `${capitalize(category)}: ${item.name} (+${item.auraBoost} aura)`
+          : `${capitalize(category)}: None`;
+        box.appendChild(div);
+      });
+    }
+
+    function renderShop() {
+      const shop = document.getElementById("shopList");
+      shop.innerHTML = "";
+
+      accessories.forEach(item => {
+        const owned = game.owned.includes(item.id);
+        const equipped = game.equipped[item.category] === item.id;
+
+        const card = document.createElement("div");
+        card.className = "shop-card";
+        card.innerHTML = `
+          <div class="shop-card-top">
+            <span>${item.name}</span>
+            <span>+${item.auraBoost}</span>
+          </div>
+          <p>${item.description}</p>
+          <p><strong>${capitalize(item.category)}</strong> | ${item.price} coins</p>
+          <div class="shop-actions">
+            <button class="shop-btn" ${owned || game.coins < item.price ? "disabled" : ""}>${owned ? "Owned" : "Buy"}</button>
+            <button class="shop-btn" ${!owned || equipped ? "disabled" : ""}>${equipped ? "Equipped" : "Equip"}</button>
+          </div>
+        `;
+
+        const buttons = card.querySelectorAll("button");
+        buttons[0].onclick = () => buyItem(item.id);
+        buttons[1].onclick = () => equipItem(item.id);
+        shop.appendChild(card);
+      });
+    }
+
+    function buyItem(id) {
+      const item = accessories.find(a => a.id === id);
+      if (!item || game.coins < item.price || game.owned.includes(id)) return;
+      game.coins -= item.price;
+      game.owned.push(id);
+      setMessage(`Bought ${item.name}. Equip it for aura.`);
+      saveGame();
+      render();
+    }
+
+    function equipItem(id) {
+      const item = accessories.find(a => a.id === id);
+      if (!item || !game.owned.includes(id)) return;
+      game.equipped[item.category] = id;
+      setMessage(`Equipped ${item.name}. Aura inflation begins.`);
+      saveGame();
+      render();
+    }
+
+    function toggleAccordion(contentId) {
+      const content = document.getElementById(contentId);
+      const icon = document.getElementById(contentId + "Icon");
+      content.classList.toggle("open");
+      icon.textContent = content.classList.contains("open") ? "－" : "＋";
+    }
+
+    function openMiniGame(title, instructions) {
+      clearInterval(tapTimer);
+      clearInterval(smileTimer);
+      document.getElementById("miniTitle").textContent = title;
+      document.getElementById("miniInstructions").textContent = instructions;
+      document.getElementById("miniArea").innerHTML = "";
+      document.getElementById("miniModal").classList.add("show");
+    }
+
+    function closeMiniGame() {
+      clearInterval(tapTimer);
+      clearInterval(smileTimer);
+      document.getElementById("miniModal").classList.remove("show");
+    }
+
+    function miniSuccess(message, reward) {
+      addStats(reward);
+      document.getElementById("miniArea").innerHTML = `
+        <h3>Success!</h3>
+        <p>${message}</p>
+        <p class="reward-text"><strong>Reward:</strong> ${formatReward(reward)}</p>
+      `;
+      setMessage(message + " Reward: " + formatReward(reward));
+    }
+
+    function miniFail(message, reward) {
+      addStats(reward);
+      document.getElementById("miniArea").innerHTML = `
+        <h3>Failed, but employed spiritually.</h3>
+        <p>${message}</p>
+        <p class="reward-text"><strong>Consolation:</strong> ${formatReward(reward)}</p>
+      `;
+      setMessage(message + " Reward: " + formatReward(reward));
+    }
+
+    function startTapGame() {
+      let tapCount = 0;
+      let timeLeft = 30;
+
+      openMiniGame("🐶 Pet the Billionaire’s Dog", "Tap 50 times before the timer ends. This is somehow networking.");
+
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `
+        <p><strong>Time:</strong> <span id="tapTime">30</span>s</p>
+        <p><strong>Taps:</strong> <span id="tapCount">0</span>/50</p>
+        <button class="tap-button" id="tapButton">TAP</button>
+      `;
+
+      document.getElementById("tapButton").onclick = () => {
+        tapCount++;
+        document.getElementById("tapCount").textContent = tapCount;
+        if (tapCount >= 50) {
+          clearInterval(tapTimer);
+          miniSuccess("The dog accepts you as rich-adjacent.", { coins: 35, gems: 3, aura: 15 });
+        }
+      };
+
+      tapTimer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("tapTime").textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(tapTimer);
+          if (tapCount >= 50) miniSuccess("The dog accepts you as rich-adjacent.", { coins: 35, gems: 3, aura: 15 });
+          else miniFail("The dog judged your work ethic.", { coins: 10 });
+        }
+      }, 1000);
+    }
+
+    function startGridGame() {
+      openMiniGame("🧼 Clean the Mansion", "Click all 10 messy squares. Luxury property management arc.");
+      makeClickSquaresGame(10, "messLeft", { coins: 45, gems: 3, aura: 12 }, "The mansion is clean. The rich people are suspiciously impressed.");
+    }
+
+    function startMopGame() {
+      openMiniGame("🧽 Mop the Mall Floor", "Click 12 dirty spots. Mall aura is still aura.");
+      makeClickSquaresGame(12, "messLeft", { coins: 65, gems: 2, aura: 18 }, "The mall floor sparkles. So does your broke-era character development.");
+    }
+
+    function makeClickSquaresGame(count, counterId, reward, successMessage) {
+      const area = document.getElementById("miniArea");
+      let left = count;
+      area.innerHTML = `
+        <p><strong>Dirty spots left:</strong> <span id="${counterId}">${count}</span></p>
+        <div class="grid-game" id="gridGame"></div>
+      `;
+
+      const grid = document.getElementById("gridGame");
+      for (let i = 0; i < count; i++) {
+        const square = document.createElement("button");
+        square.className = "square";
+        square.textContent = "🟫";
+        square.onclick = () => {
+          if (square.classList.contains("clean")) return;
+          square.classList.add("clean");
+          square.textContent = "✨";
+          left--;
+          document.getElementById(counterId).textContent = left;
+          if (left === 0) miniSuccess(successMessage, reward);
+        };
+        grid.appendChild(square);
+      }
+    }
+
+    function startMemoryGame() {
+      const code = Math.floor(1000 + Math.random() * 9000).toString();
+      openMiniGame("🔐 Remember the Investor Code", "Memorize the code before it disappears.");
+
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `<p>Memorize this code:</p><div class="memory-number">${code}</div>`;
+
+      setTimeout(() => {
+        area.innerHTML = `
+          <p>Type the code:</p>
+          <input class="input" id="memoryInput" maxlength="4" placeholder="Enter code" />
+          <div class="mini-row">
+            <button class="mini-btn" id="submitMemory">Submit Code</button>
+          </div>
+        `;
+        document.getElementById("memoryInput").focus();
+        document.getElementById("submitMemory").onclick = () => {
+          const guess = document.getElementById("memoryInput").value;
+          if (guess === code) miniSuccess("Correct. The investor thinks you are detail-oriented.", { coins: 55, gems: 5, aura: 8 });
+          else miniFail(`Wrong code. It was ${code}.`, { coins: 8 });
+        };
+      }, 3000);
+    }
+
+    function startSandwichGame() {
+      const ingredients = ["bread", "cheese", "tomato", "lettuce", "turkey"];
+      const order = ["bread", ingredients[Math.floor(Math.random() * 4) + 1], ingredients[Math.floor(Math.random() * 4) + 1], "bread"];
+      let step = 0;
+
+      openMiniGame("🥪 Make a VIP Sandwich", "Click the ingredients in the correct order.");
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `
+        <p><strong>Order:</strong> ${order.join(" → ")}</p>
+        <p><strong>Progress:</strong> <span id="sandwichProgress">0</span>/${order.length}</p>
+        <div class="option-grid" id="ingredientGrid"></div>
+      `;
+
+      const grid = document.getElementById("ingredientGrid");
+      ingredients.forEach(ingredient => {
+        const btn = document.createElement("button");
+        btn.className = "mini-choice";
+        btn.textContent = ingredient;
+        btn.onclick = () => {
+          if (ingredient === order[step]) {
+            step++;
+            document.getElementById("sandwichProgress").textContent = step;
+            if (step === order.length) miniSuccess("Sandwich complete. Gordon Ramsay has been real quiet.", { coins: 70, gems: 4, aura: 10 });
+          } else {
+            miniFail("Wrong ingredient. The VIP tasted confusion.", { coins: 12 });
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function startCouchGame() {
+      const arrows = ["left", "right", "up", "down"];
+      const symbols = { left: "⬅️", right: "➡️", up: "⬆️", down: "⬇️" };
+      const sequence = Array.from({ length: 5 }, () => arrows[Math.floor(Math.random() * arrows.length)]);
+      let step = 0;
+
+      openMiniGame("🛋️ Find Money Under the Couch", "Press the arrows in the right order.");
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `
+        <p><strong>Sequence:</strong> ${sequence.map(a => symbols[a]).join(" ")}</p>
+        <p><strong>Progress:</strong> <span id="couchProgress">0</span>/${sequence.length}</p>
+        <div class="option-grid" id="arrowGrid"></div>
+      `;
+
+      const grid = document.getElementById("arrowGrid");
+      arrows.forEach(arrow => {
+        const btn = document.createElement("button");
+        btn.className = "mini-choice";
+        btn.textContent = symbols[arrow];
+        btn.onclick = () => {
+          if (arrow === sequence[step]) {
+            step++;
+            document.getElementById("couchProgress").textContent = step;
+            if (step === sequence.length) miniSuccess("You found couch money. Poverty speedrun interrupted.", { coins: 85, gems: 2, aura: 5 });
+          } else {
+            miniFail("Wrong direction. You found crumbs and emotional damage.", { coins: 10 });
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function startSmileGame() {
+      const good = ["🙂", "😎"];
+      const bad = ["😐", "😡", "🤨"];
+      let score = 0;
+      let mistakes = 0;
+      let current = "🙂";
+
+      openMiniGame("🙂 Fake Smile at Networking", "Click Smile only when the face is friendly. Do not smile at bad vibes.");
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `
+        <div class="big-emoji" id="smileEmoji">🙂</div>
+        <p><strong>Good smiles:</strong> <span id="smileScore">0</span>/5</p>
+        <p><strong>Mistakes:</strong> <span id="smileMistakes">0</span>/3</p>
+        <button class="mini-btn center-btn" id="smileButton">Smile</button>
+      `;
+
+      function changeFace() {
+        const pool = Math.random() < 0.45 ? good : bad;
+        current = pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById("smileEmoji").textContent = current;
+      }
+
+      document.getElementById("smileButton").onclick = () => {
+        if (good.includes(current)) {
+          score++;
+          document.getElementById("smileScore").textContent = score;
+          if (score >= 5) {
+            clearInterval(smileTimer);
+            miniSuccess("Networking survived. Your jaw hurts but your aura rose.", { coins: 60, gems: 4, aura: 25 });
+          }
+        } else {
+          mistakes++;
+          document.getElementById("smileMistakes").textContent = mistakes;
+          if (mistakes >= 3) {
+            clearInterval(smileTimer);
+            miniFail("You smiled at a crypto pitch. Rookie mistake.", { coins: 10 });
+          }
+        }
+        changeFace();
+      };
+
+      smileTimer = setInterval(changeFace, 900);
+    }
+
+    function startPrinterGame() {
+      const sequence = ["Jam", "Ink", "Restart", "Pray"];
+      let step = 0;
+
+      openMiniGame("🖨️ Fix the Broken Printer", "Press the office buttons in order: Jam → Ink → Restart → Pray.");
+      const area = document.getElementById("miniArea");
+      area.innerHTML = `
+        <p><strong>Progress:</strong> <span id="printerProgress">0</span>/4</p>
+        <div class="option-grid" id="printerGrid"></div>
+      `;
+
+      const grid = document.getElementById("printerGrid");
+      sequence.sort(() => Math.random() - 0.5).forEach(word => {
+        const btn = document.createElement("button");
+        btn.className = "mini-choice";
+        btn.textContent = word;
+        btn.onclick = () => {
+          const correct = ["Jam", "Ink", "Restart", "Pray"];
+          if (word === correct[step]) {
+            step++;
+            document.getElementById("printerProgress").textContent = step;
+            if (step === correct.length) miniSuccess("Printer defeated. Office credibility unlocked.", { coins: 90, gems: 5, aura: 20 });
+          } else {
+            miniFail("The printer sensed fear and became stronger.", { coins: 10 });
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function formatReward(reward) {
+      const parts = [];
+      if (reward.coins) parts.push(`${reward.coins > 0 ? "+" : ""}${reward.coins} coins`);
+      if (reward.gems) parts.push(`${reward.gems > 0 ? "+" : ""}${reward.gems} gems`);
+      if (reward.aura) parts.push(`${reward.aura > 0 ? "+" : ""}${reward.aura} aura`);
+      return parts.join(", ") || "nothing";
+    }
+
+    function setMessage(text) {
+      document.getElementById("message").textContent = text;
+    }
+
+    function resetGame() {
+      if (!confirm("Reset your Noob to Boss journey?")) return;
+      localStorage.removeItem("noobToBossSaveV2");
+      game = {
+        coins: 5,
+        gems: 0,
+        baseAura: 0,
+        episodeIndex: 0,
+        complete: false,
+        owned: [],
+        equipped: { hat: null, glasses: null, outfit: null, item: null }
+      };
+      setMessage("Fresh start. You are once again broke with dreams.");
+      render();
+    }
+
+    function capitalize(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    loadGame();
+  </script>
+</body>
+</html>
