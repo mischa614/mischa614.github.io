@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brainrotmon Italia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#f7efe2, #ffd6a5);
+      text-align: center;
+    }
+
+    #game {
+      max-width: 750px;
+      margin: 25px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 0 25px #0003;
+    }
+
+    #stats {
+      display: flex;
+      justify-content: space-around;
+      background: #eee;
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    #map {
+      display: grid;
+      grid-template-columns: repeat(7, 55px);
+      gap: 5px;
+      justify-content: center;
+      margin: 20px;
+    }
+
+    .tile {
+      width: 55px;
+      height: 55px;
+      background: #a8e6a3;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+    }
+
+    .player {
+      background: #ffd166;
+      border: 3px solid #ef476f;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: #ef476f;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #d43d61;
+    }
+
+    #battle, #shop, #collectionBox {
+      background: #f3f3f3;
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    #log {
+      min-height: 70px;
+      background: #222;
+      color: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .hpbar {
+      width: 200px;
+      height: 16px;
+      background: #ccc;
+      border-radius: 10px;
+      margin: 8px auto;
+      overflow: hidden;
+    }
+
+    .hpfill {
+      height: 100%;
+      background: #06d6a0;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game">
+    <h1>🇮🇹 Brainrotmon Italia</h1>
+    <p>Explore the pasta fields. Battle. Catch. Level up.</p>
+
+    <div id="stats">
+      <div>❤️ HP: <span id="playerHp">60</span></div>
+      <div>⭐ Level: <span id="level">1</span></div>
+      <div>✨ XP: <span id="xp">0</span></div>
+      <div>🟡 Cannoli Balls: <span id="balls">5</span></div>
+    </div>
+
+    <div id="map"></div>
+
+    <div>
+      <button onclick="move('up')">⬆️</button><br>
+      <button onclick="move('left')">⬅️</button>
+      <button onclick="move('down')">⬇️</button>
+      <button onclick="move('right')">➡️</button>
+    </div>
+
+    <button onclick="openShop()">🛒 Shop</button>
+    <button onclick="toggleCollection()">📘 Collection</button>
+    <button onclick="saveGame()">💾 Save</button>
+    <button onclick="resetGame()">🗑️ Reset</button>
+
+    <div id="battle" class="hidden">
+      <h2 id="enemyName"></h2>
+      <div class="hpbar">
+        <div id="enemyHpBar" class="hpfill"></div>
+      </div>
+      <p id="enemyHp"></p>
+
+      <button onclick="attack('slap')">🤌 Pasta Slap</button>
+      <button onclick="attack('espresso')">☕ Espresso Blast</button>
+      <button onclick="catchMonster()">Throw Cannoli Ball</button>
+      <button onclick="run()">Run</button>
+    </div>
+
+    <div id="shop" class="hidden">
+      <h3>🛒 Nonna’s Shop</h3>
+      <button onclick="buyBall()">Buy Cannoli Ball — 10 XP</button>
+      <button onclick="heal()">Eat Pizza — Heal 20 HP for 15 XP</button>
+    </div>
+
+    <div id="collectionBox" class="hidden">
+      <h3>Your Brainrotmon</h3>
+      <p id="collection">None yet.</p>
+    </div>
+
+    <div id="log">Walk around to find a Brainrotmon.</div>
+  </div>
+
+  <script>
+    const monsters = [
+      { name: "Bombardiro Crocodilo", hp: 35, emoji: "🐊", rarity: "Rare" },
+      { name: "Tralalero Tralala", hp: 28, emoji: "🦈", rarity: "Common" },
+      { name: "Tung Tung Tung Sahur", hp: 40, emoji: "🥁", rarity: "Rare" },
+      { name: "Ballerina Cappuccina", hp: 25, emoji: "☕", rarity: "Common" },
+      { name: "Lirili Larila", hp: 30, emoji: "🦘", rarity: "Common" },
+      { name: "Chimpanzini Bananini", hp: 32, emoji: "🍌", rarity: "Common" },
+      { name: "Brr Brr Patapim", hp: 45, emoji: "🌲", rarity: "Legendary" },
+      { name: "Frigo Camelo", hp: 38, emoji: "🐫", rarity: "Rare" }
+    ];
+
+    let player = {
+      x: 3,
+      y: 3,
+      hp: 60,
+      maxHp: 60,
+      level: 1,
+      xp: 0,
+      balls: 5
+    };
+
+    let currentEnemy = null;
+    let currentEnemyMaxHp = 0;
+    let collection = [];
+
+    function drawMap() {
+      const map = document.getElementById("map");
+      map.innerHTML = "";
+
+      for (let y = 0; y < 7; y++) {
+        for (let x = 0; x < 7; x++) {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+
+          if (player.x === x && player.y === y) {
+            tile.classList.add("player");
+            tile.textContent = "🧍";
+          } else {
+            const scenery = ["🌿", "🌲", "🍝", "🍕", "🌻"];
+            tile.textContent = scenery[Math.floor(Math.random() * scenery.length)];
+          }
+
+          map.appendChild(tile);
+        }
+      }
+    }
+
+    function move(direction) {
+      if (currentEnemy) return;
+
+      if (direction === "up" && player.y > 0) player.y--;
+      if (direction === "down" && player.y < 6) player.y++;
+      if (direction === "left" && player.x > 0) player.x--;
+      if (direction === "right" && player.x < 6) player.x++;
+
+      drawMap();
+
+      if (Math.random() < 0.38) {
+        startBattle();
+      } else {
+        log("You wander through the pasta fields...");
+      }
+    }
+
+    function chooseMonster() {
+      const roll = Math.random();
+
+      if (roll < 0.08) {
+        return monsters.find(m => m.rarity === "Legendary");
+      }
+
+      if (roll < 0.32) {
+        const rares = monsters.filter(m => m.rarity === "Rare");
+        return rares[Math.floor(Math.random() * rares.length)];
+      }
+
+      const commons = monsters.filter(m => m.rarity === "Common");
+      return commons[Math.floor(Math.random() * commons.length)];
+    }
+
+    function startBattle() {
+      const monster = chooseMonster();
+      currentEnemy = { ...monster };
+      currentEnemyMaxHp = currentEnemy.hp;
+
+      document.getElementById("battle").classList.remove("hidden");
+      document.getElementById("shop").classList.add("hidden");
+
+      updateBattle();
+      log(`A wild ${currentEnemy.emoji} ${currentEnemy.name} appeared! Rarity: ${currentEnemy.rarity}`);
+    }
+
+    function attack(type) {
+      let damage;
+
+      if (type === "slap") {
+        damage = Math.floor(Math.random() * 10) + 6 + player.level;
+      } else {
+        damage = Math.floor(Math.random() * 15) + 4 + player.level;
+      }
+
+      currentEnemy.hp -= damage;
+
+      if (currentEnemy.hp <= 0) {
+        gainXp(20);
+        log(`You defeated ${currentEnemy.name}! You gained 20 XP.`);
+        endBattle();
+      } else {
+        enemyAttack();
+        updateBattle();
+        log(`You used ${type === "slap" ? "Pasta Slap" : "Espresso Blast"} and dealt ${damage} damage!`);
+      }
+    }
+
+    function enemyAttack() {
+      const damage = Math.floor(Math.random() * 8) + 3;
+      player.hp -= damage;
+
+      if (player.hp <= 0) {
+        player.hp = player.maxHp;
+        player.x = 3;
+        player.y = 3;
+        log("You fainted from too much brainrot. Nonna healed you.");
+        endBattle();
+        drawMap();
+      }
+
+      updateStats();
+    }
+
+    function catchMonster() {
+      if (player.balls <= 0) {
+        log("You have no Cannoli Balls left!");
+        return;
+      }
+
+      player.balls--;
+
+      let chance = 0.25;
+
+      if (currentEnemy.hp < currentEnemyMaxHp / 2) chance += 0.25;
+      if (currentEnemy.hp < currentEnemyMaxHp / 4) chance += 0.25;
+      if (currentEnemy.rarity === "Rare") chance -= 0.1;
+      if (currentEnemy.rarity === "Legendary") chance -= 0.25;
+
+      if (Math.random() < chance) {
+        collection.push(currentEnemy);
+        gainXp(15);
+        log(`You caught ${currentEnemy.name}! +15 XP.`);
+        updateCollection();
+        endBattle();
+      } else {
+        enemyAttack();
+        log(`${currentEnemy.name} escaped the Cannoli Ball!`);
+      }
+
+      updateStats();
+    }
+
+    function gainXp(amount) {
+      player.xp += amount;
+
+      if (player.xp >= player.level * 50) {
+        player.xp = 0;
+        player.level++;
+        player.maxHp += 10;
+        player.hp = player.maxHp;
+        log(`LEVEL UP! You are now level ${player.level}.`);
+      }
+
+      updateStats();
+    }
+
+    function run() {
+      log("You ran away dramatically like an Italian soap opera.");
+      endBattle();
+    }
+
+    function endBattle() {
+      currentEnemy = null;
+      document.getElementById("battle").classList.add("hidden");
+      updateStats();
+    }
+
+    function openShop() {
+      document.getElementById("shop").classList.toggle("hidden");
+    }
+
+    function buyBall() {
+      if (player.xp >= 10) {
+        player.xp -= 10;
+        player.balls++;
+        log("You bought one Cannoli Ball.");
+      } else {
+        log("Not enough XP.");
+      }
+
+      updateStats();
+    }
+
+    function heal() {
+      if (player.xp >= 15) {
+        player.xp -= 15;
+        player.hp = Math.min(player.maxHp, player.hp + 20);
+        log("You ate pizza and healed 20 HP.");
+      } else {
+        log("Not enough XP.");
+      }
+
+      updateStats();
+    }
+
+    function toggleCollection() {
+      document.getElementById("collectionBox").classList.toggle("hidden");
+      updateCollection();
+    }
+
+    function updateStats() {
+      document.getElementById("playerHp").textContent = player.hp;
+      document.getElementById("level").textContent = player.level;
+      document.getElementById("xp").textContent = player.xp;
+      document.getElementById("balls").textContent = player.balls;
+    }
+
+    function updateBattle() {
+      document.getElementById("enemyName").textContent =
+        `${currentEnemy.emoji} ${currentEnemy.name}`;
+
+      document.getElementById("enemyHp").textContent =
+        `HP: ${Math.max(currentEnemy.hp, 0)} / ${currentEnemyMaxHp}`;
+
+      const percent = Math.max((currentEnemy.hp / currentEnemyMaxHp) * 100, 0);
+      document.getElementById("enemyHpBar").style.width = percent + "%";
+    }
+
+    function updateCollection() {
+      document.getElementById("collection").innerHTML =
+        collection.length
+          ? collection.map(m => `${m.emoji} ${m.name} — ${m.rarity}`).join("<br>")
+          : "None yet.";
+    }
+
+    function saveGame() {
+      localStorage.setItem("brainrotmonSave", JSON.stringify({
+        player,
+        collection
+      }));
+
+      log("Game saved!");
+    }
+
+    function loadGame() {
+      const save = localStorage.getItem("brainrotmonSave");
+
+      if (save) {
+        const data = JSON.parse(save);
+        player = data.player;
+        collection = data.collection;
+        log("Loaded saved game.");
+      }
+
+      updateStats();
+      updateCollection();
+      drawMap();
+    }
+
+    function resetGame() {
+      localStorage.removeItem("brainrotmonSave");
+      location.reload();
+    }
+
+    function log(message) {
+      document.getElementById("log").textContent = message;
+    }
+
+    loadGame();
+  </script>
+</body>
+</html>
