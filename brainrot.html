@@ -335,8 +335,7 @@ function startBattle(monster,boss=false){
 currentEnemy={...monster};
 currentEnemyMaxHp=currentEnemy.hp;
 isBossFight=boss;
-document.getElementById("map").style.display="none";
-document.getElementById("controls").style.display="none";
+document.getElementById("mainArea").style.display="none";
 document.getElementById("battle").classList.remove("hidden");
 document.getElementById("shop").classList.add("hidden");
 document.getElementById("casino").classList.add("hidden");
@@ -486,8 +485,7 @@ function endBattle(reshuffle){
 currentEnemy=null;
 isBossFight=false;
 document.getElementById("battle").classList.add("hidden");
-document.getElementById("map").style.display="grid";
-document.getElementById("controls").style.display="block";
+document.getElementById("mainArea").style.display="flex";
 if(reshuffle)reshuffleBrainrots();
 updateStats();drawMap();saveGame();
 }
