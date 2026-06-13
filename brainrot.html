@@ -1,775 +1,422 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brainrotmon Italia</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #111827, #3b0764, #7f1d1d);
-      text-align: center;
-      color: white;
-      margin: 0;
-      padding: 20px;
-    }
-
-    #game {
-      max-width: 900px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.95);
-      color: #111;
-      padding: 20px;
-      border-radius: 22px;
-      box-shadow: 0 0 30px #0008;
-    }
-
-    h1 {
-      margin-bottom: 5px;
-    }
-
-    #stats {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 8px;
-      background: #eee;
-      padding: 12px;
-      border-radius: 14px;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-
-    #map {
-      display: grid;
-      grid-template-columns: repeat(7, 58px);
-      gap: 6px;
-      justify-content: center;
-      margin: 20px;
-    }
-
-    .tile {
-      width: 58px;
-      height: 58px;
-      background: #a8e6a3;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 25px;
-      border: 2px solid #ffffff88;
-    }
-
-    .player {
-      background: #ffd166;
-      border: 3px solid #ef476f;
-    }
-
-    button {
-      margin: 5px;
-      padding: 11px 15px;
-      border: none;
-      border-radius: 12px;
-      background: #ef476f;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 3px 0 #9b2341;
-    }
-
-    button:hover {
-      background: #d43d61;
-    }
-
-    button:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #9b2341;
-    }
-
-    #battle, #shop, #collectionBox, #casino {
-      background: #f3f3f3;
-      border-radius: 16px;
-      padding: 14px;
-      margin-top: 14px;
-    }
-
-    #battleView {
-      background: radial-gradient(circle, #fff7ad, #ffb703, #fb7185);
-      border: 5px solid #111;
-      border-radius: 22px;
-      padding: 20px;
-      margin: 15px auto;
-      max-width: 650px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .fighter {
-      width: 220px;
-      min-height: 260px;
-      background: white;
-      border-radius: 18px;
-      padding: 12px;
-      box-shadow: 0 0 15px #0004;
-    }
-
-    .monster-img {
-      width: 190px;
-      height: 190px;
-      object-fit: contain;
-      border-radius: 14px;
-      background: #fff;
-    }
-
-    .player-avatar {
-      font-size: 110px;
-      height: 190px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .vs {
-      font-size: 35px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 2px 2px 4px #000;
-    }
-
-    .hpbar {
-      width: 200px;
-      height: 16px;
-      background: #ccc;
-      border-radius: 10px;
-      margin: 8px auto;
-      overflow: hidden;
-    }
-
-    .hpfill {
-      height: 100%;
-      background: #06d6a0;
-      width: 100%;
-    }
-
-    #casinoPull {
-      background: linear-gradient(135deg, #020617, #581c87, #be123c);
-      color: white;
-      border-radius: 20px;
-      padding: 20px;
-      margin: 12px auto;
-      max-width: 500px;
-      border: 4px solid gold;
-    }
-
-    #casinoResult img {
-      width: 180px;
-      height: 180px;
-      object-fit: contain;
-      background: white;
-      border-radius: 18px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-
-    .collection-card {
-      display: inline-block;
-      width: 150px;
-      background: white;
-      border-radius: 14px;
-      padding: 10px;
-      margin: 8px;
-      box-shadow: 0 0 10px #0002;
-      vertical-align: top;
-    }
-
-    .collection-card img {
-      width: 120px;
-      height: 120px;
-      object-fit: contain;
-    }
-
-    #log {
-      min-height: 75px;
-      background: #111;
-      color: white;
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @media (max-width: 700px) {
-      #battleView {
-        flex-direction: column;
-      }
-
-      #map {
-        grid-template-columns: repeat(7, 42px);
-      }
-
-      .tile {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
-      }
-
-      .fighter {
-        width: 90%;
-      }
-    }
-  </style>
+<title>Brainrotmon Italia</title>
+<style>
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#111827,#3b0764,#7f1d1d);text-align:center;color:white;margin:0;padding:20px}
+#game{max-width:980px;margin:auto;background:rgba(255,255,255,.96);color:#111;padding:20px;border-radius:22px;box-shadow:0 0 30px #0008}
+#stats{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;background:#eee;padding:12px;border-radius:14px;margin-bottom:15px;font-weight:bold}
+#map{display:grid;grid-template-columns:repeat(9,62px);gap:5px;justify-content:center;margin:20px auto;background:#334155;padding:12px;border-radius:18px;width:max-content}
+.tile{width:62px;height:62px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2px solid #0004;position:relative;overflow:hidden}
+.rainbow{background:linear-gradient(135deg,#f87171,#facc15,#4ade80,#38bdf8,#c084fc)}
+.ocean{background:#38bdf8}.sand{background:#facc15}.forest{background:#22c55e}.cafe{background:#fb7185}.shadow{background:#312e81}.path{background:#d6a85c}.boss{background:radial-gradient(circle,gold,#ef4444,#111);animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+.playerTile{outline:4px solid #ef476f}
+.playerSprite{width:56px;height:56px;object-fit:contain;border-radius:8px;background:#fff8}
+.spawnSprite{width:48px;height:48px;object-fit:contain;border-radius:8px;background:white;padding:2px}
+button{margin:5px;padding:11px 15px;border:none;border-radius:12px;background:#ef476f;color:white;cursor:pointer;font-weight:bold;box-shadow:0 3px 0 #9b2341}
+button:hover{background:#d43d61}
+#battle,#shop,#collectionBox,#casino,#releaseBox{background:#f3f3f3;border-radius:16px;padding:14px;margin-top:14px}
+#battleView{background:radial-gradient(circle,#fff7ad,#ffb703,#fb7185);border:5px solid #111;border-radius:22px;padding:20px;margin:15px auto;max-width:650px;display:flex;justify-content:space-around;align-items:center;gap:15px}
+.fighter{width:220px;min-height:260px;background:white;border-radius:18px;padding:12px;box-shadow:0 0 15px #0004}
+.monster-img,.playerBattleImg{width:190px;height:190px;object-fit:contain;border-radius:14px;background:white}
+.vs{font-size:35px;font-weight:bold;color:white;text-shadow:2px 2px 4px #000}
+.hpbar{width:200px;height:16px;background:#ccc;border-radius:10px;margin:8px auto;overflow:hidden}
+.hpfill{height:100%;background:#06d6a0;width:100%}
+#casinoPull{background:linear-gradient(135deg,#020617,#581c87,#be123c);color:white;border-radius:20px;padding:20px;margin:12px auto;max-width:500px;border:4px solid gold}
+#casinoResult img{width:180px;height:180px;object-fit:contain;background:white;border-radius:18px;padding:10px;margin-top:10px}
+.collection-card{display:inline-block;width:150px;background:white;border-radius:14px;padding:10px;margin:8px;box-shadow:0 0 10px #0002;vertical-align:top}
+.collection-card img{width:120px;height:120px;object-fit:contain}
+#log{min-height:75px;background:#111;color:white;border-radius:12px;padding:14px;margin-top:15px;font-weight:bold}
+.hidden{display:none}
+@media(max-width:750px){#map{grid-template-columns:repeat(9,36px)}.tile{width:36px;height:36px}.playerSprite,.spawnSprite{width:32px;height:32px}#battleView{flex-direction:column}}
+</style>
 </head>
 
 <body>
-  <div id="game">
-    <h1>🇮🇹 Brainrotmon Italia</h1>
-    <p>Explore your region. Battle. Catch. Gamble gems. Become cursed.</p>
-
-    <div id="stats">
-      <div>❤️ HP: <span id="playerHp">60</span></div>
-      <div>⭐ Level: <span id="level">1</span></div>
-      <div>✨ XP: <span id="xp">0</span></div>
-      <div>🟡 Cannoli Balls: <span id="balls">5</span></div>
-      <div>💎 Gems: <span id="gems">20</span></div>
-      <div>📍 Region: <span id="region">Unknown</span></div>
-    </div>
-
-    <div id="map"></div>
-
-    <div id="controls">
-      <button onclick="move('up')">⬆️</button><br>
-      <button onclick="move('left')">⬅️</button>
-      <button onclick="move('down')">⬇️</button>
-      <button onclick="move('right')">➡️</button>
-    </div>
-
-    <button onclick="askLocation()">📍 Use My Location</button>
-    <button onclick="startLiveLocation()">🛰️ Live Tracking</button>
-    <button onclick="openShop()">🛒 Shop</button>
-    <button onclick="openCasino()">🎰 Crocodilo Casino</button>
-    <button onclick="toggleCollection()">📘 Collection</button>
-    <button onclick="saveGame()">💾 Save</button>
-    <button onclick="resetGame()">🗑️ Reset</button>
-
-    <div id="battle" class="hidden">
-      <div id="battleView">
-        <div class="fighter">
-          <h3>You</h3>
-          <div class="player-avatar">🧍</div>
-          <p>Trainer</p>
-        </div>
-
-        <div class="vs">VS</div>
-
-        <div class="fighter">
-          <h3 id="enemyName"></h3>
-          <img id="enemyImage" class="monster-img" src="">
-          <div class="hpbar">
-            <div id="enemyHpBar" class="hpfill"></div>
-          </div>
-          <p id="enemyHp"></p>
-        </div>
-      </div>
-
-      <button onclick="attack('slap')">🤌 Pasta Slap</button>
-      <button onclick="attack('espresso')">☕ Espresso Blast</button>
-      <button onclick="catchMonster()">Throw Cannoli Ball</button>
-      <button onclick="run()">Run</button>
-    </div>
-
-    <div id="shop" class="hidden">
-      <h3>🛒 Nonna’s Shop</h3>
-      <button onclick="buyBall()">Buy Cannoli Ball — 10 XP</button>
-      <button onclick="heal()">Eat Pizza — Heal 20 HP for 15 XP</button>
-    </div>
-
-    <div id="casino" class="hidden">
-      <h3>🎰 Crocodilo Casino</h3>
-      <div id="casinoPull">
-        <p>Trade <b>25 gems</b> for a mystery Brainrotmon.</p>
-        <p>Odds: Common 60%, Rare 30%, Legendary 10%</p>
-        <button onclick="gambleBrainrot()">Pull Mystery Brainrotmon — 25 Gems</button>
-        <div id="casinoResult"></div>
-      </div>
-    </div>
-
-    <div id="collectionBox" class="hidden">
-      <h3>Your Brainrotmon</h3>
-      <div id="collection">None yet.</div>
-    </div>
-
-    <div id="log">Click “Use My Location” or walk around to find a Brainrotmon.</div>
-  </div>
-
-  <script>
-    const monsters = [
-      { name: "Bombardiro Crocodilo", hp: 35, image: "images/bombardiro.png", rarity: "Rare" },
-      { name: "Tralalero Tralala", hp: 28, image: "images/tralalero.png", rarity: "Common" },
-      { name: "Tung Tung Tung Sahur", hp: 40, image: "images/tungtung.png", rarity: "Rare" },
-      { name: "Ballerina Cappuccina", hp: 25, image: "images/ballerina.png", rarity: "Common" },
-      { name: "Lirili Larila", hp: 30, image: "images/lirili.png", rarity: "Common" },
-      { name: "Chimpanzini Bananini", hp: 32, image: "images/chimpanzini.png", rarity: "Common" },
-      { name: "Brr Brr Patapim", hp: 45, image: "images/patapim.jpg", rarity: "Legendary" },
-      { name: "Frigo Camelo", hp: 38, image: "images/frigo.png", rarity: "Rare" }
-    ];
-
-    let player = {
-      x: 3,
-      y: 3,
-      hp: 60,
-      maxHp: 60,
-      level: 1,
-      xp: 0,
-      balls: 5,
-      gems: 20,
-      lastLoginBonus: null
-    };
-
-    let currentEnemy = null;
-    let currentEnemyMaxHp = 0;
-    let collection = [];
-    let userLocation = null;
-    let liveWatchId = null;
-
-    function dailyLoginBonus() {
-      const today = new Date().toDateString();
-
-      if (player.lastLoginBonus !== today) {
-        player.gems += 5;
-        player.lastLoginBonus = today;
-        log("Daily login bonus! You got +5 gems.");
-      }
-    }
-
-    function askLocation() {
-      if (!navigator.geolocation) {
-        log("Your browser does not support location.");
-        return;
-      }
-
-      log("Asking for location permission...");
-
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          userLocation = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          };
-
-          const region = getRegionFromLocation(userLocation.lat, userLocation.lon);
-          document.getElementById("region").textContent = region;
-          log(`Location approved! You are in the ${region}.`);
-          drawMap();
-        },
-        function() {
-          log("Location permission denied or unavailable.");
-        }
-      );
-    }
-
-    function startLiveLocation() {
-      if (!navigator.geolocation) {
-        log("Your browser does not support live location.");
-        return;
-      }
-
-      if (liveWatchId !== null) {
-        log("Live tracking is already on.");
-        return;
-      }
-
-      log("Starting live tracking...");
-
-      liveWatchId = navigator.geolocation.watchPosition(
-        function(position) {
-          userLocation = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          };
-
-          const region = getRegionFromLocation(userLocation.lat, userLocation.lon);
-          document.getElementById("region").textContent = region;
-          log(`Live location updated: ${region}.`);
-        },
-        function() {
-          log("Could not track location.");
-        },
-        {
-          enableHighAccuracy: true,
-          maximumAge: 10000,
-          timeout: 10000
-        }
-      );
-    }
-
-    function getRegionFromLocation(lat, lon) {
-      if (lat > 32 && lat < 37 && lon < -110) return "Desert Cannoli Plains";
-      if (lat > 40 && lon < -70 && lon > -90) return "East Coast Espresso Zone";
-      if (lat > 25 && lat < 37 && lon > -100 && lon < -80) return "Southern Spaghetti Swamp";
-      if (lat > 37 && lat < 50 && lon < -100) return "Northern Parmesan Tundra";
-      if (lat > 32 && lat < 42 && lon > -125 && lon < -114) return "West Coast Mozzarella Coast";
-      return "Mystery Mozzarella Region";
-    }
-
-    function getScenery() {
-      const region = userLocation
-        ? getRegionFromLocation(userLocation.lat, userLocation.lon)
-        : "Default";
-
-      if (region.includes("Desert")) return ["🌵", "🏜️", "☀️", "🪨", "🍕"];
-      if (region.includes("East Coast")) return ["🏙️", "🌊", "☕", "🌳", "🍝"];
-      if (region.includes("Southern")) return ["🌾", "🐊", "🌿", "🍝", "🍕"];
-      if (region.includes("Northern")) return ["❄️", "🌲", "🧀", "🏔️", "🌨️"];
-      if (region.includes("West Coast")) return ["🌴", "🌊", "☀️", "🍋", "🍕"];
-
-      return ["🌿", "🌲", "🍝", "🍕", "🌻"];
-    }
-
-    function drawMap() {
-      const map = document.getElementById("map");
-      map.innerHTML = "";
-
-      const scenery = getScenery();
-
-      for (let y = 0; y < 7; y++) {
-        for (let x = 0; x < 7; x++) {
-          const tile = document.createElement("div");
-          tile.className = "tile";
-
-          if (player.x === x && player.y === y) {
-            tile.classList.add("player");
-            tile.textContent = "🧍";
-          } else {
-            tile.textContent = scenery[Math.floor(Math.random() * scenery.length)];
-          }
-
-          map.appendChild(tile);
-        }
-      }
-    }
-
-    function move(direction) {
-      if (currentEnemy) return;
-
-      if (direction === "up" && player.y > 0) player.y--;
-      if (direction === "down" && player.y < 6) player.y++;
-      if (direction === "left" && player.x > 0) player.x--;
-      if (direction === "right" && player.x < 6) player.x++;
-
-      drawMap();
-
-      if (Math.random() < 0.38) {
-        startBattle();
-      } else {
-        if (userLocation) {
-          log(`You explore the ${getRegionFromLocation(userLocation.lat, userLocation.lon)}...`);
-        } else {
-          log("You wander through the pasta fields...");
-        }
-      }
-    }
-
-    function chooseMonster() {
-      const roll = Math.random();
-
-      if (roll < 0.08) {
-        return monsters.find(m => m.rarity === "Legendary");
-      }
-
-      if (roll < 0.32) {
-        const rares = monsters.filter(m => m.rarity === "Rare");
-        return rares[Math.floor(Math.random() * rares.length)];
-      }
-
-      const commons = monsters.filter(m => m.rarity === "Common");
-      return commons[Math.floor(Math.random() * commons.length)];
-    }
-
-    function startBattle() {
-      const monster = chooseMonster();
-      currentEnemy = { ...monster };
-      currentEnemyMaxHp = currentEnemy.hp;
-
-      document.getElementById("map").style.display = "none";
-      document.getElementById("controls").style.display = "none";
-      document.getElementById("battle").classList.remove("hidden");
-      document.getElementById("shop").classList.add("hidden");
-      document.getElementById("casino").classList.add("hidden");
-
-      updateBattle();
-      log(`A wild ${currentEnemy.name} appeared! Rarity: ${currentEnemy.rarity}`);
-    }
-
-    function attack(type) {
-      let damage;
-
-      if (type === "slap") {
-        damage = Math.floor(Math.random() * 10) + 6 + player.level;
-      } else {
-        damage = Math.floor(Math.random() * 15) + 4 + player.level;
-      }
-
-      currentEnemy.hp -= damage;
-
-      if (currentEnemy.hp <= 0) {
-        player.gems += 5;
-        gainXp(20);
-        log(`You defeated ${currentEnemy.name}! +20 XP and +5 gems.`);
-        endBattle();
-      } else {
-        enemyAttack();
-        updateBattle();
-        log(`You used ${type === "slap" ? "Pasta Slap" : "Espresso Blast"} and dealt ${damage} damage!`);
-      }
-    }
-
-    function enemyAttack() {
-      const damage = Math.floor(Math.random() * 8) + 3;
-      player.hp -= damage;
-
-      if (player.hp <= 0) {
-        player.hp = player.maxHp;
-        player.x = 3;
-        player.y = 3;
-        log("You fainted from too much brainrot. Nonna healed you.");
-        endBattle();
-        drawMap();
-      }
-
-      updateStats();
-    }
-
-    function catchMonster() {
-      if (player.balls <= 0) {
-        log("You have no Cannoli Balls left!");
-        return;
-      }
-
-      player.balls--;
-
-      let chance = 0.25;
-
-      if (currentEnemy.hp < currentEnemyMaxHp / 2) chance += 0.25;
-      if (currentEnemy.hp < currentEnemyMaxHp / 4) chance += 0.25;
-      if (currentEnemy.rarity === "Rare") chance -= 0.1;
-      if (currentEnemy.rarity === "Legendary") chance -= 0.25;
-
-      if (Math.random() < chance) {
-        collection.push(currentEnemy);
-        player.gems += 10;
-        gainXp(15);
-        log(`You caught ${currentEnemy.name}! +15 XP and +10 gems.`);
-        updateCollection();
-        endBattle();
-      } else {
-        enemyAttack();
-        log(`${currentEnemy.name} escaped the Cannoli Ball!`);
-      }
-
-      updateStats();
-    }
-
-    function gainXp(amount) {
-      player.xp += amount;
-
-      if (player.xp >= player.level * 50) {
-        player.xp = 0;
-        player.level++;
-        player.maxHp += 10;
-        player.hp = player.maxHp;
-
-        player.balls += 2;
-        player.gems += 10;
-
-        log(`LEVEL UP! You are now level ${player.level}. +2 Cannoli Balls and +10 gems.`);
-      }
-
-      updateStats();
-    }
-
-    function run() {
-      log("You ran away dramatically like an Italian soap opera.");
-      endBattle();
-    }
-
-    function endBattle() {
-      currentEnemy = null;
-      document.getElementById("battle").classList.add("hidden");
-      document.getElementById("map").style.display = "grid";
-      document.getElementById("controls").style.display = "block";
-      updateStats();
-      drawMap();
-    }
-
-    function openShop() {
-      document.getElementById("shop").classList.toggle("hidden");
-      document.getElementById("casino").classList.add("hidden");
-    }
-
-    function openCasino() {
-      document.getElementById("casino").classList.toggle("hidden");
-      document.getElementById("shop").classList.add("hidden");
-    }
-
-    function buyBall() {
-      if (player.xp >= 10) {
-        player.xp -= 10;
-        player.balls++;
-        log("You bought one Cannoli Ball.");
-      } else {
-        log("Not enough XP.");
-      }
-
-      updateStats();
-    }
-
-    function heal() {
-      if (player.xp >= 15) {
-        player.xp -= 15;
-        player.hp = Math.min(player.maxHp, player.hp + 20);
-        log("You ate pizza and healed 20 HP.");
-      } else {
-        log("Not enough XP.");
-      }
-
-      updateStats();
-    }
-
-    function gambleBrainrot() {
-      if (player.gems < 25) {
-        log("Not enough gems for Crocodilo Casino.");
-        return;
-      }
-
-      player.gems -= 25;
-      updateStats();
-
-      const resultBox = document.getElementById("casinoResult");
-      resultBox.innerHTML = "<h3>🎰 Rolling...</h3>";
-
-      setTimeout(function() {
-        const roll = Math.random();
-        let rarity;
-
-        if (roll < 0.60) {
-          rarity = "Common";
-        } else if (roll < 0.90) {
-          rarity = "Rare";
-        } else {
-          rarity = "Legendary";
-        }
-
-        const possible = monsters.filter(m => m.rarity === rarity);
-        const prize = { ...possible[Math.floor(Math.random() * possible.length)] };
-
-        collection.push(prize);
-        updateCollection();
-
-        resultBox.innerHTML = `
-          <h3>You pulled ${prize.name}!</h3>
-          <p>Rarity: ${prize.rarity}</p>
-          <img src="${prize.image}" alt="${prize.name}">
-        `;
-
-        log(`🎰 Crocodilo Casino pull: ${prize.name}! Rarity: ${prize.rarity}`);
-        saveGame();
-      }, 900);
-    }
-
-    function toggleCollection() {
-      document.getElementById("collectionBox").classList.toggle("hidden");
-      updateCollection();
-    }
-
-    function updateStats() {
-      document.getElementById("playerHp").textContent = player.hp;
-      document.getElementById("level").textContent = player.level;
-      document.getElementById("xp").textContent = player.xp;
-      document.getElementById("balls").textContent = player.balls;
-      document.getElementById("gems").textContent = player.gems;
-    }
-
-    function updateBattle() {
-      document.getElementById("enemyName").textContent =
-        `${currentEnemy.name} (${currentEnemy.rarity})`;
-
-      document.getElementById("enemyImage").src = currentEnemy.image;
-
-      document.getElementById("enemyHp").textContent =
-        `HP: ${Math.max(currentEnemy.hp, 0)} / ${currentEnemyMaxHp}`;
-
-      const percent = Math.max((currentEnemy.hp / currentEnemyMaxHp) * 100, 0);
-      document.getElementById("enemyHpBar").style.width = percent + "%";
-    }
-
-    function updateCollection() {
-      const collectionBox = document.getElementById("collection");
-
-      if (!collection.length) {
-        collectionBox.innerHTML = "None yet.";
-        return;
-      }
-
-      collectionBox.innerHTML = collection.map(m => `
-        <div class="collection-card">
-          <img src="${m.image}" alt="${m.name}">
-          <b>${m.name}</b>
-          <p>${m.rarity}</p>
-        </div>
-      `).join("");
-    }
-
-    function saveGame() {
-      localStorage.setItem("brainrotmonSave", JSON.stringify({
-        player,
-        collection,
-        userLocation
-      }));
-    }
-
-    function loadGame() {
-      const save = localStorage.getItem("brainrotmonSave");
-
-      if (save) {
-        const data = JSON.parse(save);
-        player = { ...player, ...data.player };
-        collection = data.collection || [];
-        userLocation = data.userLocation || null;
-
-        if (userLocation) {
-          document.getElementById("region").textContent =
-            getRegionFromLocation(userLocation.lat, userLocation.lon);
-        }
-      }
-
-      dailyLoginBonus();
-      updateStats();
-      updateCollection();
-      drawMap();
-      saveGame();
-    }
-
-    function resetGame() {
-      localStorage.removeItem("brainrotmonSave");
-      location.reload();
-    }
-
-    function log(message) {
-      document.getElementById("log").textContent = message;
-    }
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "ArrowUp" || event.key === "8") move("up");
-      if (event.key === "ArrowDown" || event.key === "2") move("down");
-      if (event.key === "ArrowLeft" || event.key === "4") move("left");
-      if (event.key === "ArrowRight" || event.key === "6") move("right");
-    });
-
-    loadGame();
-  </script>
+<div id="game">
+<h1>🇮🇹 Brainrotmon Italia</h1>
+<p><b id="regionTitle">Rainbow Rot Plaza</b>: explore, battle, catch, gamble gems, unlock cursed regions.</p>
+
+<div id="stats">
+<div>❤️ HP: <span id="playerHp">60</span></div>
+<div>⭐ Level: <span id="level">1</span></div>
+<div>✨ XP: <span id="xp">0</span></div>
+<div>🟡 Cannoli Balls: <span id="balls">5</span></div>
+<div>💎 Gems: <span id="gems">20</span></div>
+<div>🏆 Score: <span id="score">0</span>/50</div>
+<div>🎒 Collection: <span id="collectionCount">0</span>/6</div>
+</div>
+
+<div id="map"></div>
+
+<div id="controls">
+<button onclick="move('up')">⬆️</button><br>
+<button onclick="move('left')">⬅️</button>
+<button onclick="move('down')">⬇️</button>
+<button onclick="move('right')">➡️</button>
+</div>
+
+<button onclick="openShop()">🛒 Shop</button>
+<button onclick="openCasino()">🎰 Crocodilo Casino</button>
+<button onclick="toggleCollection()">📘 Collection</button>
+<button onclick="saveGame()">💾 Save</button>
+<button onclick="resetGame()">🗑️ Reset</button>
+
+<div id="battle" class="hidden">
+<div id="battleView">
+<div class="fighter">
+<h3>You</h3>
+<img class="playerBattleImg" src="images/clavicular.png">
+<p>Clavicular Trainer</p>
+</div>
+<div class="vs">VS</div>
+<div class="fighter">
+<h3 id="enemyName"></h3>
+<img id="enemyImage" class="monster-img" src="">
+<div class="hpbar"><div id="enemyHpBar" class="hpfill"></div></div>
+<p id="enemyHp"></p>
+</div>
+</div>
+<button onclick="attack('slap')">🤌 Pasta Slap</button>
+<button onclick="attack('espresso')">☕ Espresso Blast</button>
+<button onclick="catchMonster()">Throw Cannoli Ball</button>
+<button onclick="run()">Run</button>
+</div>
+
+<div id="shop" class="hidden">
+<h3>🛒 Nonna’s Shop</h3>
+<button onclick="buyBall()">Buy Cannoli Ball — 10 XP</button>
+<button onclick="heal()">Eat Pizza — Heal 20 HP for 15 XP</button>
+</div>
+
+<div id="casino" class="hidden">
+<h3>🎰 Crocodilo Casino</h3>
+<div id="casinoPull">
+<p>Trade <b>25 gems</b> for monsters or rare gem jackpots.</p>
+<p>Monster odds: Common 58%, Rare 27%, Legendary 8%, Gem Jackpot 7%</p>
+<button onclick="gambleBrainrot()">Open Mystery Case — 25 Gems</button>
+<div id="casinoResult"></div>
+</div>
+</div>
+
+<div id="collectionBox" class="hidden">
+<h3>Your Brainrotmon</h3>
+<div id="collection">None yet.</div>
+</div>
+
+<div id="releaseBox" class="hidden">
+<h3>Collection Full</h3>
+<p id="releaseMessage"></p>
+<div id="releaseOptions"></div>
+<button onclick="cancelPendingBrainrot()">Let the new Brainrot go</button>
+</div>
+
+<div id="log">Move around. Step on Brainrots to battle them. Reach edges to travel regions.</div>
+</div>
+
+<script>
+const monsters=[
+{name:"Bombardiro Crocodilo",hp:35,image:"images/bombardiro.png",rarity:"Rare"},
+{name:"Tralalero Tralala",hp:28,image:"images/tralalero.png",rarity:"Common"},
+{name:"Tung Tung Tung Sahur",hp:40,image:"images/tungtung.png",rarity:"Rare"},
+{name:"Ballerina Cappuccina",hp:25,image:"images/ballerina.png",rarity:"Common"},
+{name:"Lirili Larila",hp:30,image:"images/lirili.png",rarity:"Common"},
+{name:"Chimpanzini Bananini",hp:32,image:"images/chimpanzini.png",rarity:"Common"},
+{name:"Brr Brr Patapim",hp:45,image:"images/patapim.jpg",rarity:"Legendary"},
+{name:"Frigo Camelo",hp:38,image:"images/frigo.png",rarity:"Rare"}
+];
+
+const regions={
+plaza:{name:"Rainbow Rot Plaza",terrain:"rainbow",bias:null,edges:{left:"ocean",right:"dunes",up:"woods",down:"cafe"}},
+ocean:{name:"Brainrot Ocean",terrain:"ocean",bias:"Tralalero Tralala",edges:{right:"plaza"}},
+dunes:{name:"Cannoli Dunes",terrain:"sand",bias:"Frigo Camelo",edges:{left:"plaza"}},
+woods:{name:"Patapim Woods",terrain:"forest",bias:"Brr Brr Patapim",edges:{down:"plaza"},boss:true},
+cafe:{name:"Cappuccina District",terrain:"cafe",bias:"Ballerina Cappuccina",edges:{up:"plaza"}},
+shadow:{name:"Shadow Spaghetti Route",terrain:"shadow",bias:"Tung Tung Tung Sahur",edges:{down:"woods"}}
+};
+
+const mapWidth=9,mapHeight=9,maxCollection=6;
+let currentRegion="plaza",mapTiles=[],brainrotSpawns=[];
+let player={x:4,y:4,hp:60,maxHp:60,level:1,xp:0,balls:5,gems:20,lastLoginBonus:null,shadowUnlocked:false};
+let currentEnemy=null,currentEnemyMaxHp=0,isBossFight=false,collection=[],pendingBrainrot=null;
+
+function dailyLoginBonus(){
+const today=new Date().toDateString();
+if(player.lastLoginBonus!==today){player.gems+=5;player.lastLoginBonus=today;log("Daily login bonus! +5 gems.");}
+}
+
+function getScore(){
+let total=0;
+collection.forEach(m=>{if(m.rarity==="Common")total+=2;if(m.rarity==="Rare")total+=8;if(m.rarity==="Legendary")total+=20;});
+return Math.min(total,50);
+}
+
+function generateTerrain(){
+const terrain=regions[currentRegion].terrain;
+mapTiles=[];
+for(let y=0;y<mapHeight;y++){
+const row=[];
+for(let x=0;x<mapWidth;x++){
+if(x===4||y===4)row.push("path");
+else row.push(terrain);
+}
+mapTiles.push(row);
+}
+if(regions[currentRegion].boss)mapTiles[1][4]="boss";
+}
+
+function weightedMonster(){
+const bias=regions[currentRegion].bias;
+if(bias&&Math.random()<0.55)return {...monsters.find(m=>m.name===bias)};
+return {...chooseMonster()};
+}
+
+function chooseMonster(){
+const roll=Math.random();
+if(roll<0.08)return monsters.find(m=>m.rarity==="Legendary");
+if(roll<0.32){const rares=monsters.filter(m=>m.rarity==="Rare");return rares[Math.floor(Math.random()*rares.length)];}
+const commons=monsters.filter(m=>m.rarity==="Common");return commons[Math.floor(Math.random()*commons.length)];
+}
+
+function reshuffleBrainrots(){
+brainrotSpawns=[];
+while(brainrotSpawns.length<7){
+const x=Math.floor(Math.random()*mapWidth),y=Math.floor(Math.random()*mapHeight);
+if(x===player.x&&y===player.y)continue;
+if(mapTiles[y][x]==="boss")continue;
+if(brainrotSpawns.some(s=>s.x===x&&s.y===y))continue;
+brainrotSpawns.push({x,y,monster:weightedMonster()});
+}
+drawMap();
+}
+
+function drawMap(){
+document.getElementById("regionTitle").textContent=regions[currentRegion].name;
+const map=document.getElementById("map");map.innerHTML="";
+for(let y=0;y<mapHeight;y++){
+for(let x=0;x<mapWidth;x++){
+const tile=document.createElement("div");
+tile.className=`tile ${mapTiles[y][x]}`;
+const spawn=brainrotSpawns.find(s=>s.x===x&&s.y===y);
+if(player.x===x&&player.y===y){tile.classList.add("playerTile");tile.innerHTML=`<img class="playerSprite" src="images/clavicular.png">`;}
+else if(spawn){tile.innerHTML=`<img class="spawnSprite" src="${spawn.monster.image}">`;}
+else if(mapTiles[y][x]==="boss"){tile.innerHTML="👑";}
+map.appendChild(tile);
+}}
+}
+
+function transitionRegion(dir){
+const next=regions[currentRegion].edges[dir];
+if(!next){log("There is no route that way yet.");return false;}
+if(next==="shadow"&&!player.shadowUnlocked){log("A cursed gate blocks the way. Defeat Brr Brr Patapim first.");return false;}
+currentRegion=next;player.x=4;player.y=4;generateTerrain();reshuffleBrainrots();
+log(`You entered ${regions[currentRegion].name}.`);
+saveGame();return true;
+}
+
+function move(direction){
+if(currentEnemy)return;
+let newX=player.x,newY=player.y;
+if(direction==="up")newY--; if(direction==="down")newY++; if(direction==="left")newX--; if(direction==="right")newX++;
+if(newX<0)return transitionRegion("left");
+if(newX>=mapWidth)return transitionRegion("right");
+if(newY<0)return transitionRegion("up");
+if(newY>=mapHeight)return transitionRegion("down");
+player.x=newX;player.y=newY;drawMap();
+
+if(mapTiles[player.y][player.x]==="boss"){
+startBattle({...monsters.find(m=>m.name==="Brr Brr Patapim"),hp:95},true);return;
+}
+
+const spawnIndex=brainrotSpawns.findIndex(s=>s.x===player.x&&s.y===player.y);
+if(spawnIndex!==-1){
+startBattle(brainrotSpawns[spawnIndex].monster,false);
+brainrotSpawns.splice(spawnIndex,1);
+}else log(`You move through ${regions[currentRegion].name}.`);
+}
+
+function startBattle(monster,boss=false){
+currentEnemy={...monster};currentEnemyMaxHp=currentEnemy.hp;isBossFight=boss;
+document.getElementById("map").style.display="none";
+document.getElementById("controls").style.display="none";
+document.getElementById("battle").classList.remove("hidden");
+document.getElementById("shop").classList.add("hidden");
+document.getElementById("casino").classList.add("hidden");
+updateBattle();
+log(boss?`⚠️ BOSS FIGHT: ${currentEnemy.name} emerges from the woods!`:`A wild ${currentEnemy.name} appeared!`);
+}
+
+function attack(type){
+let damage=type==="slap"?Math.floor(Math.random()*10)+6+player.level:Math.floor(Math.random()*15)+4+player.level;
+currentEnemy.hp-=damage;
+if(currentEnemy.hp<=0){
+if(isBossFight){player.level++;player.maxHp+=10;player.hp=player.maxHp;player.gems+=50;player.shadowUnlocked=true;regions.woods.edges.up="shadow";log("👑 You defeated Brr Brr Patapim! Level up, +50 gems, Shadow Spaghetti Route unlocked!");}
+else{player.gems+=5;gainXp(20);log(`You defeated ${currentEnemy.name}! +20 XP and +5 gems.`);}
+endBattle(true);
+}else{enemyAttack();updateBattle();log(`You used ${type==="slap"?"Pasta Slap":"Espresso Blast"} and dealt ${damage} damage!`);}
+}
+
+function enemyAttack(){
+const damage=Math.floor(Math.random()*8)+3+(isBossFight?5:0);
+player.hp-=damage;
+if(player.hp<=0){player.hp=player.maxHp;player.x=4;player.y=4;log("You fainted from too much brainrot. Nonna healed you.");endBattle(true);}
+updateStats();
+}
+
+function catchMonster(){
+if(isBossFight){log("You cannot catch the boss. Defeat it to unlock the next region.");return;}
+if(player.balls<=0){log("You have no Cannoli Balls left!");return;}
+player.balls--;
+let chance=.25;
+if(currentEnemy.hp<currentEnemyMaxHp/2)chance+=.25;
+if(currentEnemy.hp<currentEnemyMaxHp/4)chance+=.25;
+if(currentEnemy.rarity==="Rare")chance-=.1;
+if(currentEnemy.rarity==="Legendary")chance-=.25;
+if(Math.random()<chance){
+addBrainrot(currentEnemy,`You caught ${currentEnemy.name}! +15 XP and +10 gems.`);
+player.gems+=10;gainXp(15);endBattle(true);
+}else{enemyAttack();log(`${currentEnemy.name} escaped the Cannoli Ball!`);}
+updateStats();
+}
+
+function addBrainrot(monster,successMessage){
+if(collection.length<maxCollection){collection.push({...monster});updateCollection();log(successMessage);saveGame();return true;}
+pendingBrainrot={...monster,message:successMessage};
+showReleaseMenu(monster);
+return false;
+}
+
+function showReleaseMenu(monster){
+document.getElementById("releaseBox").classList.remove("hidden");
+document.getElementById("releaseMessage").textContent=`Your collection is full. Release one Brainrotmon to keep ${monster.name}, or let it go.`;
+const box=document.getElementById("releaseOptions");
+box.innerHTML=collection.map((m,i)=>`<button onclick="releaseForPending(${i})">Release ${m.name} (${m.rarity})</button>`).join("");
+}
+
+function releaseForPending(index){
+const released=collection.splice(index,1)[0];
+collection.push(pendingBrainrot);
+log(`Released ${released.name}. Kept ${pendingBrainrot.name}.`);
+pendingBrainrot=null;
+document.getElementById("releaseBox").classList.add("hidden");
+updateCollection();updateStats();saveGame();
+}
+
+function cancelPendingBrainrot(){
+log(`${pendingBrainrot.name} was let go.`);
+pendingBrainrot=null;
+document.getElementById("releaseBox").classList.add("hidden");
+}
+
+function gainXp(amount){
+player.xp+=amount;
+if(player.xp>=player.level*50){
+player.xp=0;player.level++;player.maxHp+=10;player.hp=player.maxHp;player.balls+=2;player.gems+=10;
+log(`LEVEL UP! Level ${player.level}. +2 Cannoli Balls and +10 gems.`);
+}
+updateStats();
+}
+
+function run(){log("You ran away dramatically. The Brainrots reshuffled.");endBattle(true);}
+
+function endBattle(reshuffle){
+currentEnemy=null;isBossFight=false;
+document.getElementById("battle").classList.add("hidden");
+document.getElementById("map").style.display="grid";
+document.getElementById("controls").style.display="block";
+if(reshuffle)reshuffleBrainrots();
+updateStats();drawMap();saveGame();
+}
+
+function openShop(){document.getElementById("shop").classList.toggle("hidden");document.getElementById("casino").classList.add("hidden");}
+function openCasino(){document.getElementById("casino").classList.toggle("hidden");document.getElementById("shop").classList.add("hidden");}
+
+function buyBall(){if(player.xp>=10){player.xp-=10;player.balls++;log("You bought one Cannoli Ball.");}else log("Not enough XP.");updateStats();saveGame();}
+function heal(){if(player.xp>=15){player.xp-=15;player.hp=Math.min(player.maxHp,player.hp+20);log("You ate pizza and healed 20 HP.");}else log("Not enough XP.");updateStats();saveGame();}
+
+function gambleBrainrot(){
+if(player.gems<25){log("Not enough gems for Crocodilo Casino.");return;}
+player.gems-=25;updateStats();
+const resultBox=document.getElementById("casinoResult");
+resultBox.innerHTML="<h3>🎰 Opening case...</h3>";
+let flashes=0;
+const flash=setInterval(()=>{
+const fake=monsters[Math.floor(Math.random()*monsters.length)];
+resultBox.innerHTML=`<h3>🎰 ${fake.name}</h3><img src="${fake.image}">`;
+flashes++;
+if(flashes>=8){
+clearInterval(flash);
+const roll=Math.random();
+if(roll>.93){
+const jackpot=[30,50,100][Math.floor(Math.random()*3)];
+player.gems+=jackpot;resultBox.innerHTML=`<h3>💎 GEM JACKPOT!</h3><p>+${jackpot} gems</p>`;log(`Crocodilo Casino jackpot! +${jackpot} gems.`);
+}else{
+let rarity=roll<.58?"Common":roll<.85?"Rare":"Legendary";
+const possible=monsters.filter(m=>m.rarity===rarity);
+const prize={...possible[Math.floor(Math.random()*possible.length)]};
+resultBox.innerHTML=`<h3>You pulled ${prize.name}!</h3><p>${prize.rarity}</p><img src="${prize.image}">`;
+addBrainrot(prize,`🎰 Crocodilo Casino pull: ${prize.name}!`);
+}
+reshuffleBrainrots();updateStats();saveGame();
+}},130);
+}
+
+function toggleCollection(){document.getElementById("collectionBox").classList.toggle("hidden");updateCollection();}
+
+function updateStats(){
+document.getElementById("playerHp").textContent=player.hp;
+document.getElementById("level").textContent=player.level;
+document.getElementById("xp").textContent=player.xp;
+document.getElementById("balls").textContent=player.balls;
+document.getElementById("gems").textContent=player.gems;
+document.getElementById("score").textContent=getScore();
+document.getElementById("collectionCount").textContent=collection.length;
+}
+
+function updateBattle(){
+document.getElementById("enemyName").textContent=`${currentEnemy.name} (${isBossFight?"BOSS":currentEnemy.rarity})`;
+document.getElementById("enemyImage").src=currentEnemy.image;
+document.getElementById("enemyHp").textContent=`HP: ${Math.max(currentEnemy.hp,0)} / ${currentEnemyMaxHp}`;
+document.getElementById("enemyHpBar").style.width=Math.max((currentEnemy.hp/currentEnemyMaxHp)*100,0)+"%";
+}
+
+function updateCollection(){
+const box=document.getElementById("collection");
+if(!collection.length){box.innerHTML="None yet.";return;}
+box.innerHTML=collection.map(m=>`<div class="collection-card"><img src="${m.image}"><b>${m.name}</b><p>${m.rarity}</p></div>`).join("");
+updateStats();
+}
+
+function saveGame(){
+localStorage.setItem("brainrotmonSave",JSON.stringify({player,collection,currentRegion}));
+}
+
+function loadGame(){
+const save=localStorage.getItem("brainrotmonSave");
+if(save){
+const data=JSON.parse(save);
+player={...player,...data.player};
+collection=data.collection||[];
+currentRegion=data.currentRegion||"plaza";
+if(player.shadowUnlocked)regions.woods.edges.up="shadow";
+}
+dailyLoginBonus();generateTerrain();reshuffleBrainrots();updateStats();updateCollection();saveGame();
+}
+
+function resetGame(){localStorage.removeItem("brainrotmonSave");location.reload();}
+function log(message){document.getElementById("log").textContent=message;}
+
+document.addEventListener("keydown",function(event){
+const keys=["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","8","2","4","6"];
+if(keys.includes(event.key))event.preventDefault();
+if(event.key==="ArrowUp"||event.key==="8")move("up");
+if(event.key==="ArrowDown"||event.key==="2")move("down");
+if(event.key==="ArrowLeft"||event.key==="4")move("left");
+if(event.key==="ArrowRight"||event.key==="6")move("right");
+});
+
+loadGame();
+</script>
 </body>
 </html>
