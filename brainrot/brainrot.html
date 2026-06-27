@@ -51,7 +51,7 @@
     <div id="battleView">
       <div class="fighter">
         <h3>You</h3>
-        <img class="playerBattleImg" src="../images/clavicular.png">
+       <img class="playerBattleImg" src="../images/clavicular.png" alt="Clavicular">
         <p>Clavicular Trainer</p>
       </div>
 
@@ -344,7 +344,7 @@ function drawMap() {
 
       if (player.x === x && player.y === y) {
         tile.classList.add("playerTile");
-        tile.innerHTML = `<img class="playerSprite" src="../images/clavicular.png">`;
+        tile.innerHTML = `<img class="playerSprite" src="../images/clavicular.png" alt="Clavicular">`;
       } else if (spawn) {
         tile.innerHTML = `<img class="spawnSprite ${spawn.monster.shiny ? "shinyBorder" : ""}" src="${spawn.monster.image}">`;
       } else if (mapTiles[y][x] === "boss") {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>I'm Trying to Say...</title>
+
+  <link rel="stylesheet" href="wordfinder.css" />
+</head>
+
+<body>
+  <main class="app">
+    <section class="top-card">
+      <h1>I'm Trying to Say...</h1>
+      <p class="subtitle">Answer a few questions to find the word.</p>
+    </section>
+
+    <section class="progress-card">
+      <p id="stepText">Question 1</p>
+      <div class="progress-bar">
+        <div id="progressFill"></div>
+      </div>
+    </section>
+
+    <section class="question-card">
+      <h2 id="question">Loading...</h2>
+      <div id="answers"></div>
+    </section>
+
+    <section id="guessBox"></section>
+
+    <section class="bottom-buttons">
+      <button id="backButton" class="secondary-button">Back</button>
+      <button id="restartButton" class="secondary-button">Start Over</button>
+    </section>
+  </main>
+
+  <!-- Dictionary must load BEFORE wordfinder.js -->
+  <script src="wordfinder-dictionary.js"></script>
+  <script src="wordfinder.js"></script>
+</body>
+</html>
